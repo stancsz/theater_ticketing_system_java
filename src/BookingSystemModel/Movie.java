@@ -28,4 +28,14 @@ public class Movie {
     public void setTheaters(ArrayList theaters) {
         this.theaters = theaters;
     }
+
+    @Override
+    public boolean equals(Object o){
+        Movie m = (Movie) o;
+        if (name.equals(m.getName())){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }

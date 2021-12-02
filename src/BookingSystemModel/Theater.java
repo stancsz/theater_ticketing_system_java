@@ -27,4 +27,14 @@ public class Theater {
     public void setShowtimes(ArrayList<Showtime> showtimes) {
         this.showtimes = showtimes;
     }
+
+    @Override
+    public boolean equals(Object o){
+        Theater t = (Theater) o;
+        if (location.equals(t.getLocation())){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }

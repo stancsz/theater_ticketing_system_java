@@ -37,4 +37,14 @@ public class Showtime {
     public void setRoomNumber(int roomNumber) {
         this.roomNumber = roomNumber;
     }
+
+    @Override
+    public boolean equals(Object o){
+        Showtime s = (Showtime) o;
+        if (startTime.equals(s.getStartTime())){
+            return true;
+        } else{
+            return false;
+        }
+    }
 }
