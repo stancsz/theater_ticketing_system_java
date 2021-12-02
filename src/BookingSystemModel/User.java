@@ -1,5 +1,6 @@
 package BookingSystemModel;
 
+// DUMMY CLASS
 public class User {
 
     private int userId;
