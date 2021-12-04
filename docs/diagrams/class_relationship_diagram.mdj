@@ -3302,7 +3302,7 @@
 											"top": 604,
 											"width": 57.80810546875,
 											"height": 13,
-											"text": "Database"
+											"text": "database"
 										},
 										{
 											"_type": "LabelView",
@@ -11191,7 +11191,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF17mY9/alQc0c="
 							},
-							"name": "Database",
+							"name": "database",
 							"stereotype": "Model"
 						}
 					]
@@ -19055,7 +19055,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Database",
+					"name": "database",
 					"ownedViews": [
 						{
 							"_type": "UMLPackageView",
@@ -19203,7 +19203,7 @@
 											"top": 190,
 											"width": 51.2763671875,
 											"height": 13,
-											"text": "Database"
+											"text": "database"
 										},
 										{
 											"_type": "LabelView",
