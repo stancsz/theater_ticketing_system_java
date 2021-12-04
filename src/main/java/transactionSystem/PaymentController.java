@@ -34,7 +34,7 @@ public class PaymentController {
                         rs.getInt("userID"),
                         rs.getInt("ticketID")
                 );
-                System.out.println(object.toString());
+//                System.out.println(object.toString());
                 payments.put(String.valueOf(rs.getInt("paymentID")),
                         object);
             }
@@ -45,4 +45,10 @@ public class PaymentController {
         return payments;
     }
 
+    @Override
+    public String toString() {
+        return "PaymentController{" +
+                "payments=" + payments +
+                '}';
+    }
 }
