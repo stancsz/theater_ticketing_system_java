@@ -37,4 +37,9 @@ public class Theater {
             return false;
         }
     }
+
+    @Override
+    public String toString(){
+        return location;
+    }
 }

@@ -47,4 +47,9 @@ public class Showtime {
             return false;
         }
     }
+
+    @Override
+    public String toString(){
+        return startTime;
+    }
 }
