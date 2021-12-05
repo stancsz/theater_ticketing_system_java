@@ -6,6 +6,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentControllerTest {
@@ -29,7 +31,7 @@ class PaymentControllerTest {
     }
 
     @Test
-    void charge() {
+    void charge() throws SQLException {
         PaymentController paymentControllerTest = new PaymentController();
         paymentControllerTest.charge(new User(), new Ticket());
     }

@@ -55,15 +55,20 @@ public class PaymentController {
         return payments;
     }
 
-    public void charge(User user, Ticket ticket) {
+    public void charge(User user, Ticket ticket) throws SQLException {
         Set<Integer> ids = payments.keySet().stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet()); // getting int set
-        Integer newID = Collections.max(ids)+1;
-        System.out.println(newID);
+        Integer newID = Collections.max(ids)+1; // get an new id for payment table
         if (user.isRegistered() == true) {
-//            payments.put();
+            payments.put(newID.toString(), new Payment(newID, ticket.getPrice(), user.getId(), ticket.getId()));
         } else {
         }
-
+        Connection c = Controller.getConnection();
+        String sql = "INSERT INTO payment(paymentID, amount, userID, ticketID) " +
+                String.format("Values (%o, %f, %o, %o)", newID, ticket.getPrice(), user.getId(), ticket.getId());
+        System.out.println(sql);
+        Connection conn = c;
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
     }
 
     @Override

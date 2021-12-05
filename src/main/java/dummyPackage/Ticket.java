@@ -1,9 +1,16 @@
 package dummyPackage;
 
 public class Ticket {
-    double price;
+    private double price;
+    private Integer id;
 
     public double getPrice() {
+        price = 100.00;
         return price;
+    }
+
+    public Integer getId() {
+        id = 005;
+        return id;
     }
 }
