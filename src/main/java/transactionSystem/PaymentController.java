@@ -72,8 +72,8 @@ public class PaymentController {
         Connection conn = Controller.getConnection();
         String sql = "SELECT userID, Credit, expiryDate FROM credits";
         try (
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql)) {
 
             // loop through the result set
             while (rs.next()) {
@@ -102,7 +102,7 @@ public class PaymentController {
 
     public void charge(User user, Ticket ticket) throws SQLException {
         Set<Integer> ids = payments.keySet().stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet()); // getting int set
-        Integer newID = Collections.max(ids)+1; // get an new id for payment table
+        Integer newID = Collections.max(ids) + 1; // get an new id for payment table
 
         Payment newPayment = new Payment(newID, ticket.getPrice(), user.getId(), ticket.getId());
         addPayment(newPayment);
@@ -128,10 +128,10 @@ public class PaymentController {
         }
     }
 
-    public static void refund(Payment payment){
+    public static void refund(Payment payment) {
         Connection conn = Controller.getConnection();
         String sql = String.format("SELECT isRegistered FROM users where UserID = %o",
-                payment.getUserID()) ;
+                payment.getUserID());
         double amount = 0;
         Statement stmt = null;
         boolean isRegistered = false;
@@ -143,17 +143,13 @@ public class PaymentController {
         try {
             ResultSet rs = stmt.executeQuery(sql);
             isRegistered = rs.getBoolean("isRegistered");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
             conn.close();
             stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        if (isRegistered){
+        if (isRegistered) {
             amount = payment.getAmount();
             System.out.println(String.format("Issuing $ %f refund to registered user %o", amount, payment.getUserID()));
         } else {
@@ -174,6 +170,25 @@ public class PaymentController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Payment findPayment(Ticket ticket) {
+        Connection conn = Controller.getConnection();
+        String sql = "SELECT paymentID FROM payment " +
+                String.format("WHERE ticketID = %s ;", ticket.getId());
+        System.out.println(sql);
+        Statement stmt = null;
+        Integer paymentID = -1;
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            paymentID = rs.getInt("paymentID");
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Payment payment = payments.get(paymentID.toString());
+        return payment;
     }
 
     @Override

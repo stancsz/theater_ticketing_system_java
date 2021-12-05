@@ -56,6 +56,8 @@ public class Controller {
         System.out.println(sql);
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(sql);
+        conn.close();
+        stmt.close();
     }
 
     public static void deleteFromPayment(Integer paymentID) throws SQLException {
@@ -65,5 +67,7 @@ public class Controller {
         System.out.println(sql);
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(sql);
+        conn.close();
+        stmt.close();
     }
 }

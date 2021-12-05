@@ -36,4 +36,10 @@ class PaymentControllerTest {
         PaymentController paymentController = new PaymentController();
         paymentController.removePayment(new Payment(10, 20, 1, 6));
     }
+
+    @Test
+    void findPayment() {
+        PaymentController paymentController = new PaymentController();
+        System.out.println(paymentController.findPayment(new Ticket()).toString());
+    }
 }
