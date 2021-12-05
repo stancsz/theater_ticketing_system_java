@@ -29,6 +29,10 @@ public class Movie {
         this.theaters = theaters;
     }
 
+    public void addTheater(Theater t){
+        theaters.add(t);
+    }
+
     @Override
     public boolean equals(Object o){
         Movie m = (Movie) o;

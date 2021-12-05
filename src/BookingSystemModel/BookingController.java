@@ -11,15 +11,15 @@ public class BookingController {
     public BookingController() {
         tickets = new ArrayList<Ticket>();
         movies = new ArrayList<Movie>();
-        loadFromDatabase();
-        for(Ticket t : tickets){
-            if(!movies.contains(t.getMovie())){
-                movies.add(t.getMovie());
-            }
-        }
+        loadMovieAndTheater();
+        loadShowtimes();
+        loadSeats();
+        createTickets();
+
     }
 
-    private void loadFromDatabase(){
+    private void loadSeats() {
+        String query;
 
         Connection c = null;
         try {
@@ -30,8 +30,84 @@ public class BookingController {
             System.exit(0);
         }
 
-        String query = "SELECT TicketID, movieName, showtime, theater, seat, availability FROM ticket";
+        for (Movie m : movies) {
+            ArrayList<Theater> theaters = m.getTheaters();
+            for (Theater t : theaters) {
+                ArrayList<Showtime> showtimes = t.getShowtimes();
+                for (Showtime s : showtimes){
+                    query = "SELECT DISTINCT seat FROM ticket WHERE movieName = '" + m.getName() + "'";
+                    query += "AND theater = '" + t.getLocation() + "'";
+                    query += "AND showtime = '" + s.getStartTime() + "'";
 
+                    try{
+                        Connection conn = c;
+                        Statement stmt = null;
+                        stmt = conn.createStatement();
+                        ResultSet rs = stmt.executeQuery(query);
+
+                        while (rs.next()){
+                            int seatNumber = rs.getInt("seat");
+                            System.out.println(seatNumber);
+                            Seat seat = new Seat(seatNumber);
+                            s.addSeat(seat);
+                        }
+                    } catch (SQLException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+    private void loadShowtimes(){
+        String query;
+
+        Connection c = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:sqlite.db");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        for (Movie m : movies){
+            ArrayList<Theater> theaters = m.getTheaters();
+            for (Theater t : theaters){
+                query = "SELECT DISTINCT showtime FROM ticket WHERE movieName = '" + m.getName() + "'";
+                query += "AND theater = '" + t.getLocation() + "'";
+                try{
+                    Connection conn = c;
+                    Statement stmt = null;
+                    stmt = conn.createStatement();
+                    ResultSet rs = stmt.executeQuery(query);
+
+                    while (rs.next()){
+                        String theShowtime = rs.getString("showtime");
+                        Showtime showtime = new Showtime(theShowtime, 36);
+                        t.addShowtime(showtime);
+                    }
+                } catch (SQLException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void loadMovieAndTheater(){
+
+        String query;
+
+        Connection c = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:sqlite.db");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        query = "SELECT DISTINCT movieName FROM ticket";
         try{
             Connection conn = c;
             Statement stmt = null;
@@ -39,24 +115,76 @@ public class BookingController {
             ResultSet rs = stmt.executeQuery(query);
 
             while (rs.next()){
-                int ticketID = rs.getInt("TicketID");
                 String movieName = rs.getString("movieName");
-                String theShowtime = rs.getString("showtime");
-                String theTheater = rs.getString("theater");
-                int seatNumber = rs.getInt("seat");
-
-
                 Movie movie = new Movie(movieName);
-                Theater theater = new Theater(theTheater);
-                Showtime showtime = new Showtime(theShowtime, 36);
-                Seat seat = new Seat(seatNumber);
-
-                Ticket ticket = new Ticket(ticketID, seat, movie, theater, showtime);
-                tickets.add(ticket);
+                movies.add(movie);
 
             }
         } catch (SQLException e){
             e.printStackTrace();
+        }
+
+        for (Movie m : movies){
+            query = "SELECT DISTINCT theater FROM ticket WHERE movieName = '" + m.getName() + "'";
+            try{
+                Connection conn = c;
+                Statement stmt = null;
+                stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+
+                while (rs.next()){
+                    String theTheater = rs.getString("theater");
+                    System.out.println(theTheater);
+                    Theater theater = new Theater(theTheater);
+                    m.addTheater(theater);
+                }
+            } catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void createTickets(){
+        String query;
+
+        Connection c = null;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:sqlite.db");
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        for (Movie m : movies) {
+            ArrayList<Theater> theaters = m.getTheaters();
+            for (Theater t : theaters) {
+                ArrayList<Showtime> showtimes = t.getShowtimes();
+                for (Showtime s : showtimes){
+                    ArrayList<Seat> seats = s.getSeats();
+                    for (Seat st : seats){
+                        query = "SELECT DISTINCT TicketID FROM ticket WHERE movieName = '" + m.getName() + "'";
+                        query += "AND theater = '" + t.getLocation() + "'";
+                        query += "AND showtime = '" + s.getStartTime() + "'";
+                        query += "AND seat = '" + st.getSeatNumber() + "'";
+
+                        try{
+                            Connection conn = c;
+                            Statement stmt = null;
+                            stmt = conn.createStatement();
+                            ResultSet rs = stmt.executeQuery(query);
+
+                            while (rs.next()){
+                                int ticketID = rs.getInt("TicketID");
+                                Ticket ticket = new Ticket(ticketID, st, m, t, s);
+                                tickets.add(ticket);
+                            }
+                        } catch (SQLException e){
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -94,21 +222,20 @@ public class BookingController {
     }
 
     public ArrayList<Theater> getAllTheaters(Movie m){
-        ArrayList<Theater> theaters = new ArrayList<Theater>();
-        for (Ticket t : tickets){
-            if (t.getMovie().equals(m)) {
-                theaters.add(t.getTheater());
-            }
-        }
-
-        return theaters;
+        return m.getTheaters();
     }
 
     public ArrayList<Showtime> getAllShowtimes(Movie m, Theater t){
         ArrayList<Showtime> showtimes = new ArrayList<Showtime>();
-        for (Ticket ticket : tickets){
-            if (ticket.getMovie().equals(m) && ticket.getTheater().equals(t)) {
-                showtimes.add(ticket.getShowtime());
+        for (Movie mv : movies){
+            if (mv.getName().equals(m.getName())){
+                ArrayList<Theater> theaters = new ArrayList<Theater>();
+                theaters = mv.getTheaters();
+                for (Theater th: theaters){
+                    if (th.getLocation().equals(t.getLocation())){
+                        showtimes = th.getShowtimes();
+                    }
+                }
             }
         }
         return showtimes;
@@ -116,13 +243,12 @@ public class BookingController {
 
     public ArrayList<Seat> getAllSeats(Movie m, Theater t, Showtime s){
         ArrayList<Seat> seats = new ArrayList<Seat>();
-
-        for (Ticket ticket : tickets){
-            if (ticket.getMovie().equals(m) && ticket.getTheater().equals(t) && ticket.getShowtime().equals(s)) {
-                seats.add(ticket.getSeat());
+        ArrayList<Showtime> showtimes = getAllShowtimes(m, t);
+        for (Showtime showtime : showtimes){
+            if (showtime.getStartTime().equals(s.getStartTime())){
+                seats = showtime.getSeats();
             }
         }
-
         return seats;
     }
 }

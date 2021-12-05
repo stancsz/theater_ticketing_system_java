@@ -76,4 +76,5 @@ public class Ticket {
     public void setShowtime(Showtime showtime) {
         this.showtime = showtime;
     }
+
 }

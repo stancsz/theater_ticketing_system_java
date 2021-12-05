@@ -38,6 +38,10 @@ public class Showtime {
         this.roomNumber = roomNumber;
     }
 
+    public void addSeat(Seat s){
+        seats.add(s);
+    }
+
     @Override
     public boolean equals(Object o){
         Showtime s = (Showtime) o;

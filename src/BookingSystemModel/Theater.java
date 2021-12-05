@@ -28,6 +28,10 @@ public class Theater {
         this.showtimes = showtimes;
     }
 
+    public void addShowtime(Showtime s){
+        showtimes.add(s);
+    }
+
     @Override
     public boolean equals(Object o){
         Theater t = (Theater) o;
