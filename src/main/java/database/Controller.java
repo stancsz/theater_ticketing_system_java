@@ -1,5 +1,8 @@
 package database;
 
+import dummyPackage.Ticket;
+import dummyPackage.User;
+
 import java.sql.*;
 
 /**
@@ -33,5 +36,15 @@ public class Controller {
             System.exit(0);
         }
         return c;
+    }
+
+    public static void insertIntoPayments(User user, Ticket ticket, Integer newID) throws SQLException {
+        Connection c = Controller.getConnection();
+        String sql = "INSERT INTO payment(paymentID, amount, userID, ticketID) " +
+                String.format("Values (%o, %f, %o, %o)", newID, ticket.getPrice(), user.getId(), ticket.getId());
+        System.out.println(sql);
+        Connection conn = c;
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
     }
 }
