@@ -57,4 +57,13 @@ public class Controller {
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(sql);
     }
+
+    public static void deleteFromPayment(Integer paymentID) throws SQLException {
+        Connection conn = Controller.getConnection();
+        String sql = "DELETE FROM Payment " +
+                String.format("WHERE paymentID = %s ;", paymentID);
+        System.out.println(sql);
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+    }
 }

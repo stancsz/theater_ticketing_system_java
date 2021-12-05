@@ -18,8 +18,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static database.Controller.insertIntoCredits;
-import static database.Controller.insertIntoPayment;
+import static database.Controller.*;
 
 public class PaymentController {
     private HashMap<String, Payment> payments;
@@ -109,7 +108,7 @@ public class PaymentController {
         addPayment(newPayment);
     }
 
-    private void addPayment(Payment newPayment) throws SQLException {
+    public void addPayment(Payment newPayment) throws SQLException {
         Integer paymentID = newPayment.getPaymentID();
         double amount = newPayment.getAmount();
         Integer userID = newPayment.getUserID();
@@ -119,7 +118,15 @@ public class PaymentController {
         insertIntoPayment(paymentID, amount, userID, ticketID);
     }
 
-
+    public void removePayment(Payment payment) {
+        Integer paymentID = payment.getPaymentID();
+        payments.remove(paymentID);
+        try {
+            deleteFromPayment(paymentID);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void refund(Payment payment){
         Connection conn = Controller.getConnection();
