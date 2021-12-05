@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static database.Controller.insertIntoCredits;
-import static database.Controller.insertIntoPayments;
+import static database.Controller.insertIntoPayment;
 
 public class PaymentController {
     private HashMap<String, Payment> payments;
@@ -104,13 +104,27 @@ public class PaymentController {
     public void charge(User user, Ticket ticket) throws SQLException {
         Set<Integer> ids = payments.keySet().stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet()); // getting int set
         Integer newID = Collections.max(ids)+1; // get an new id for payment table
-        payments.put(newID.toString(), new Payment(newID, ticket.getPrice(), user.getId(), ticket.getId()));
-        insertIntoPayments(user, ticket, newID);
+
+        Payment newPayment = new Payment(newID, ticket.getPrice(), user.getId(), ticket.getId());
+        addPayment(newPayment);
     }
+
+    private void addPayment(Payment newPayment) throws SQLException {
+        Integer paymentID = newPayment.getPaymentID();
+        double amount = newPayment.getAmount();
+        Integer userID = newPayment.getUserID();
+        Integer ticketID = newPayment.getTicketID();
+
+        payments.put(String.valueOf(paymentID), newPayment);
+        insertIntoPayment(paymentID, amount, userID, ticketID);
+    }
+
+
 
     public static void refund(Payment payment){
         Connection conn = Controller.getConnection();
-        String sql = String.format("SELECT isRegistered FROM users where UserID = %o", payment.getUserID()) ;
+        String sql = String.format("SELECT isRegistered FROM users where UserID = %o",
+                payment.getUserID()) ;
         double amount = 0;
         Statement stmt = null;
         boolean isRegistered = false;
