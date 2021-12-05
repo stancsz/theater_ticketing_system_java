@@ -26,6 +26,22 @@ public class Payment {
                 ", ticketID=" + ticketID +
                 '}';
     }
+
+    public Integer getPaymentID() {
+        return paymentID;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public Integer getTicketID() {
+        return ticketID;
+    }
 }
 
 

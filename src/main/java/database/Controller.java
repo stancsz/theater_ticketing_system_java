@@ -47,4 +47,13 @@ public class Controller {
         Statement stmt = conn.createStatement();
         stmt.executeUpdate(sql);
     }
+
+    public static void insertIntoCredits(Integer userId, double credit, String expiryDate) throws SQLException {
+        Connection conn = Controller.getConnection();
+        String sql = "INSERT INTO credits(UserID, Credit, expiryDate) " +
+                String.format("Values (%o, %f, \"%s\");", userId, credit, expiryDate);
+        System.out.println(sql);
+        Statement stmt = conn.createStatement();
+        stmt.executeUpdate(sql);
+    }
 }

@@ -10,12 +10,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static database.Controller.insertIntoCredits;
 import static database.Controller.insertIntoPayments;
 
 public class PaymentController {
@@ -56,17 +59,20 @@ public class PaymentController {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        try {
+            c.close();
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return payments;
     }
 
     public static HashMap<String, Credit> getCreditModels() {
-        Connection c = Controller.getConnection();
         HashMap<String, Credit> credits = new HashMap<String, Credit>();
-
+        Connection conn = Controller.getConnection();
         String sql = "SELECT userID, Credit, expiryDate FROM credits";
-
-        try (Connection conn = c;
+        try (
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -87,6 +93,11 @@ public class PaymentController {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return credits;
     }
 
@@ -97,12 +108,51 @@ public class PaymentController {
         insertIntoPayments(user, ticket, newID);
     }
 
-    public void refund(Payment payment){
-//        if (user.isRegistered() == true) {
-//        } else {
-//            payments.put()
-//            insertIntoCredits();
-//        }
+    public static void refund(Payment payment){
+        Connection conn = Controller.getConnection();
+        String sql = String.format("SELECT isRegistered FROM users where UserID = %o", payment.getUserID()) ;
+        double amount = 0;
+        Statement stmt = null;
+        boolean isRegistered = false;
+        try {
+            stmt = conn.createStatement();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            ResultSet rs = stmt.executeQuery(sql);
+            isRegistered = rs.getBoolean("isRegistered");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            conn.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        if (isRegistered){
+            amount = payment.getAmount();
+            System.out.println(String.format("Issuing $ %f refund to registered user %o", amount, payment.getUserID()));
+        } else {
+            amount = 0.85 * payment.getAmount();
+            System.out.println(String.format("Issuing $ %f refund to non-registered user %o", amount, payment.getUserID()));
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate nyd = LocalDate.now().plusYears(1);
+        String expiryDate = formatter.format(nyd);
+//        System.out.println(expiryDate);
+        try {
+            insertIntoCredits(payment.getUserID(), amount, expiryDate);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
