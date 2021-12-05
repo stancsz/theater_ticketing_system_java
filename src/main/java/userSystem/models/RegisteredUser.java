@@ -7,8 +7,8 @@ public class RegisteredUser extends User{
     private ArrayList<CreditCard> listOfCreditCards;
    
 
-    public RegisteredUser(String name, String address, int userId, String eMail, ArrayList<Credit> listOfCredits, ArrayList<Ticket> listOfTickets) {
-        super(userId, eMail,listOfCredits, listOfTickets);
+    public RegisteredUser(String name, String address, int userId, String eMail) {
+        super(userId, eMail);
         this.name = name;
         this.address = address;
         this.listOfCreditCards = new ArrayList<CreditCard>();
@@ -38,5 +38,4 @@ public class RegisteredUser extends User{
     public void setListOfCreditCards(ArrayList<CreditCard> listOfCreditCards) {
         this.listOfCreditCards = listOfCreditCards;
     }
-
 }

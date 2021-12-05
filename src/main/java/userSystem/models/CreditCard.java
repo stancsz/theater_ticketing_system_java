@@ -5,9 +5,9 @@ public class CreditCard {
     private String cardholderAddress;
     private String creditCardNumber;
     private Date expiryDate;
-    private String ccv;
+    private int ccv;
 
-    public CreditCard(String cardholderName, String cardholderAddress, String creditCardNumber, Date expiryDate, String ccv) {
+    public CreditCard(String cardholderName, String cardholderAddress, String creditCardNumber, Date expiryDate, int ccv) {
         this.cardholderName = cardholderName;
         this.cardholderAddress = cardholderAddress;
         this.creditCardNumber = creditCardNumber;
@@ -47,11 +47,11 @@ public class CreditCard {
         this.expiryDate = expiryDate;
     }
 
-    public String getCcv() {
+    public int getCcv() {
         return this.ccv;
     }
 
-    public void setCcv(String ccv) {
+    public void setCcv(int ccv) {
         this.ccv = ccv;
     }
 

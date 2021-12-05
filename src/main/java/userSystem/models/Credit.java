@@ -26,5 +26,9 @@ public class Credit {
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
+    @Override
+    public String toString() {
+        return "Credit: " +credit+"expiryDate: "+expiryDate;
+    }
     
 }

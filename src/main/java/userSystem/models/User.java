@@ -1,4 +1,5 @@
 package main.java.userSystem.models;
+
 import java.util.ArrayList;
 public class User {
     private int userId;
@@ -7,11 +8,19 @@ public class User {
     private ArrayList<Ticket> listOfTickets;    
 
     public User(int userId, String eMail) {
-        this.userId = userId;
-        this.eMail = eMail;
+        setUserId(userId);
+        setEMail(eMail);
         this.listOfCredits = new ArrayList<Credit>();
         this.listOfTickets = new ArrayList<Ticket>();
     }
+
+    public User(int userId, String eMail, ArrayList<Credit> listOfCredits, ArrayList<Ticket> listOfTickets) {
+        setUserId(userId);
+        setEMail(eMail);
+        setListOfCredits(listOfCredits);
+        setListOfTickets(listOfTickets);
+    }
+
     public double getTotalCreditAmount(){
         double totalCredits =0;
         for (Credit c: listOfCredits){

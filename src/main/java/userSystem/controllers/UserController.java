@@ -7,13 +7,15 @@ public class UserController{
     private ArrayList<User> listOfUsers;
      
     public UserController(){
-
+        listOfRegisteredUsers = new ArrayList<RegisteredUser>();
+        listOfUsers = new ArrayList<User>();
     }    
-    public void registerUser(User user, String name, String address){
-        RegisteredUser ru = new RegisteredUser(name, address, user.getListOfCredits(), user.getUserId(), user.getEMail(), user.getListOfCredits(), user.getListOfTickets()) 
+
+    public void registerUser(String name, String address, int userId, String eMail){
+        RegisteredUser ru = new RegisteredUser(name, address, userId, eMail);
+        listOfRegisteredUsers.add(ru);
     }
-    public void addUser(String eMail){
-        //TODO assign random unique user id
+    public void addUser(int userId, String eMail){
         User u = new User(userId, eMail);
         listOfUsers.add(u);
     }
@@ -24,14 +26,26 @@ public class UserController{
     public void removeTicket(User user, Ticket ticket){
         user.getListOfTickets().remove(ticket);
     }
-    public void addRefundCredit(User user, Ticket ticket){
-        // we dont have price of a ticket 
-        Credit credit = new Credit(ticket.price, ticket.showtime);
-        user.getListOfCredits().add(credit);
-    }
-    public void removeRefundCredit(User user, Ticket ticket){
+    // public void addRefundCredit(User user, Ticket ticket){
+    //     // we dont have price of a ticket 
+    //     Credit credit = new Credit(ticket.getPrice(), ticket.getShowtime().getStartTime());
+    //     user.getListOfCredits().add(credit);
+    // }
 
-        user.getListOfCredits().remove(credit);
-
+    public ArrayList<RegisteredUser> getListOfRegisteredUsers() {
+        return this.listOfRegisteredUsers;
     }
+
+    public void setListOfRegisteredUsers(ArrayList<RegisteredUser> listOfRegisteredUsers) {
+        this.listOfRegisteredUsers = listOfRegisteredUsers;
+    }
+
+    public ArrayList<User> getListOfUsers() {
+        return this.listOfUsers;
+    }
+
+    public void setListOfUsers(ArrayList<User> listOfUsers) {
+        this.listOfUsers = listOfUsers;
+    }
+
 }
