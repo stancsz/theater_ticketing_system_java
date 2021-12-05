@@ -11,48 +11,15 @@ import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentControllerTest {
-
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
-
     @Test
-    void getPaymentModels() {
+    void getCreditModels() {
         PaymentController paymentControllerTest = new PaymentController();
         System.out.println(paymentControllerTest);
-    }
-
-    @Test
-    void testGetPaymentModels() {
     }
 
     @Test
     void charge() throws SQLException {
         PaymentController paymentControllerTest = new PaymentController();
         paymentControllerTest.charge(new User(), new Ticket());
-    }
-
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
-
-    @Test
-    void setPayments() {
-    }
-
-    @Test
-    void getPayments() {
-    }
-
-    @Test
-    void testToString() {
     }
 }

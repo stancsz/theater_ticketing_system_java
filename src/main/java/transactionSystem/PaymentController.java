@@ -20,10 +20,11 @@ import static database.Controller.insertIntoPayments;
 
 public class PaymentController {
     private HashMap<String, Payment> payments;
-    private HashMap<String, Payment> credits;
+    private HashMap<String, Credit> credits;
 
     public PaymentController() {
         this.payments = getPaymentModels();
+        this.credits = getCreditModels();
     }
 
     public static HashMap<String, Payment> getPaymentModels() {
@@ -80,7 +81,7 @@ public class PaymentController {
                         rs.getString("expiryDate")
                 );
 //                System.out.println(object.toString());
-                credits.put(String.valueOf(rs.getInt("paymentID")),
+                credits.put(String.valueOf(rs.getInt("userID")),
                         object);
             }
         } catch (SQLException e) {
@@ -129,6 +130,7 @@ public class PaymentController {
     public String toString() {
         return "PaymentController{" +
                 "payments=" + payments +
+                "\n, credits=" + credits +
                 '}';
     }
 }

@@ -5,7 +5,7 @@ public class Ticket {
     private Integer id;
 
     public double getPrice() {
-        price = 100.00;
+        price = 20.00;
         return price;
     }
 
