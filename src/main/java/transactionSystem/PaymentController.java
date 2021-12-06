@@ -70,7 +70,7 @@ public class PaymentController {
     public static HashMap<String, Credit> getCreditModels() {
         HashMap<String, Credit> credits = new HashMap<String, Credit>();
         Connection conn = Controller.getConnection();
-        String sql = "SELECT userID, Credit, expiryDate FROM credits";
+        String sql = "SELECT creditID, userID, Credit, expiryDate FROM credits";
         try (
                 Statement stmt = conn.createStatement();
                 ResultSet rs = stmt.executeQuery(sql)) {
@@ -86,7 +86,7 @@ public class PaymentController {
                         rs.getString("expiryDate")
                 );
 //                System.out.println(object.toString());
-                credits.put(String.valueOf(rs.getInt("userID")),
+                credits.put(String.valueOf(rs.getInt("CreditID")),
                         object);
             }
         } catch (SQLException e) {
@@ -128,7 +128,7 @@ public class PaymentController {
         }
     }
 
-    public static void refund(Payment payment) {
+    public void refund(Payment payment) {
         Connection conn = Controller.getConnection();
         String sql = String.format("SELECT isRegistered FROM users where UserID = %o",
                 payment.getUserID());
@@ -160,6 +160,10 @@ public class PaymentController {
         LocalDate nyd = LocalDate.now().plusYears(1);
         String expiryDate = formatter.format(nyd);
 //        System.out.println(expiryDate);
+        Set<Integer> ids = credits.keySet().stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet()); // getting int set
+        Integer newID = Collections.max(ids) + 1; // get an new id for payment table
+
+        credits.put(newID.toString(), new Credit(payment.getUserID(), amount, expiryDate));
         try {
             insertIntoCredits(payment.getUserID(), amount, expiryDate);
         } catch (SQLException e) {
