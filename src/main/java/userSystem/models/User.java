@@ -2,10 +2,10 @@ package userSystem.models;
 
 import java.util.ArrayList;
 public class User {
-    private int userId;
-    private String eMail;
-    private ArrayList<Credit> listOfCredits;    
-    private ArrayList<Ticket> listOfTickets;    
+    protected int userId;
+    protected String eMail;
+    protected ArrayList<Credit> listOfCredits;    
+    protected ArrayList<Ticket> listOfTickets;    
 
     public User(int userId, String eMail) {
         setUserId(userId);
@@ -69,6 +69,10 @@ public class User {
 
     public void setListOfTickets(ArrayList<Ticket> listOfTickets) {
         this.listOfTickets = listOfTickets;
+    }
+    @Override
+    public String toString(){
+        return "userID="+getUserId()+"email="+getEMail();
     }
     
 }

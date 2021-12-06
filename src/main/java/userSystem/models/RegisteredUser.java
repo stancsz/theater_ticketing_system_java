@@ -43,4 +43,8 @@ public class RegisteredUser extends User{
         this.listOfCreditCards = listOfCreditCards;
     }
 
+    @Override
+    public String toString(){
+        return "UserID="+getUserId()+"email"+getEMail()+"name="+getName()+"address="+getAddress();
+    }
 }
