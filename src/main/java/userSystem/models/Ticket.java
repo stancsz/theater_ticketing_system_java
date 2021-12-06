@@ -1,4 +1,4 @@
-package main.java.userSystem.models;
+package userSystem.models;
 //temp ticket 
 public class Ticket {
     private int ticketId; 

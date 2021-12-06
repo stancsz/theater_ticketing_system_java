@@ -1,4 +1,4 @@
-package main.java.userSystem.models;
+package userSystem.models;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package main.java.userSystem.models;
+package userSystem.models;
 
 import java.util.ArrayList;
 public class RegisteredUser extends User{
@@ -31,6 +31,10 @@ public class RegisteredUser extends User{
         this.address = address;
     }
 
+    public void addCreditCard(CreditCard cc){
+        this.listOfCreditCards.add(cc);
+    }
+
     public ArrayList<CreditCard> getListOfCreditCards() {
         return this.listOfCreditCards;
     }
@@ -38,4 +42,5 @@ public class RegisteredUser extends User{
     public void setListOfCreditCards(ArrayList<CreditCard> listOfCreditCards) {
         this.listOfCreditCards = listOfCreditCards;
     }
+
 }

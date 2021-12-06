@@ -1,4 +1,4 @@
-package main.java.userSystem.models;
+package userSystem.models;
 
 import java.util.ArrayList;
 public class User {
@@ -47,12 +47,20 @@ public class User {
         this.eMail = eMail;
     }
 
+    public void addCredit(Credit credit){
+        this.listOfCredits.add(credit);
+    }
+
     public ArrayList<Credit> getListOfCredits() {
         return this.listOfCredits;
     }
 
     public void setListOfCredits(ArrayList<Credit> listOfCredits) {
         this.listOfCredits = listOfCredits;
+    }
+
+    public void addTicket(Ticket ticket){
+        this.listOfTickets.add(ticket);
     }
 
     public ArrayList<Ticket> getListOfTickets() {
