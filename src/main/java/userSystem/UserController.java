@@ -33,14 +33,32 @@ public class UserController{
      * @param name
      * @param address
      */
-    public void addRegisteredUser(int userId,String eMail, String name, String address){
-        RegisteredUser ru = new RegisteredUser(name, address, userId, eMail);
+    public int addRegisteredUser(String eMail, String name, String address){
+         // get newiD
+        int maxId=0;
+        int Id;
+        for (User u: listOfUsers){
+            Id = u.getUserId();
+            if(Id > maxId){
+                maxId = Id;
+            }
+        }
+        for(RegisteredUser ru: listOfRegisteredUsers){
+            Id = ru.getUserId();
+            if(Id> maxId){
+                maxId =Id;
+            }
+        }
+
+        int newId = maxId + 1;
+        RegisteredUser ru = new RegisteredUser(name, address, newId, eMail);
         listOfRegisteredUsers.add(ru);
         try {
-            addRegisteredUserToDB(userId, eMail, name, address);
+            addRegisteredUserToDB(newId, eMail, name, address);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return newId;
     }
     /**
      * Creates regular user and adds it to listOfUsers
@@ -48,14 +66,33 @@ public class UserController{
      * @param userId
      * @param eMail
      */
-    public void addUser(int userId, String eMail){
-        User u = new User(userId, eMail);
-        listOfUsers.add(u);
+    public int addUser(String eMail){
+        // get newiD
+        int maxId=0;
+        int Id;
+        for (User u: listOfUsers){
+            Id = u.getUserId();
+            if(Id > maxId){
+                maxId = Id;
+            }
+        }
+        for(RegisteredUser ru: listOfRegisteredUsers){
+            Id = ru.getUserId();
+            if(Id> maxId){
+                maxId =Id;
+            }
+        }
+
+        int newId = maxId + 1;
+
+        User newU = new User(newId, eMail);
+        listOfUsers.add(newU);
         try {
-            addUserToDB(userId, eMail);
+            addUserToDB(newId, eMail);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return newId;
     }
     /**
      * Finds and delets user object.
@@ -174,10 +211,12 @@ public class UserController{
             int userID = rs.getInt("UserID");
             String email = rs.getString("email");
             String name = rs.getString("name");
-            String address = rs.getString("name");
+            String address = rs.getString("address");
             Boolean isRegistered = rs.getBoolean("isRegistered");
+
             if(isRegistered){
                 RegisteredUser ru = new RegisteredUser(name, address, userID, email);
+                loadCreditCards(conn, ru);
                 listOfRegisteredUsers.add(ru);
             }else{
                 User u = new User(userID, email);
@@ -253,7 +292,24 @@ public class UserController{
         int rs = stmt.executeUpdate(sql);
         conn.close();
     }
+    public void loadCreditCards(Connection conn, RegisteredUser ru) throws SQLException{
+        String sql = String.format("SELECT * FROM paymentCreditCards"); 
 
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(sql);
+        while (rs.next()) {
+            int userID = rs.getInt("UserID");
+            String cardholderName = rs.getString("name");
+            String creditCardNumber = rs.getString("CreditCardNo");
+            String cardholderAddress = rs.getString("address");
+            String expiryDate = rs.getString("expiryDate");
+            Integer cvv = rs.getInt("cvv");
+            if(ru.getUserId() == userID){
+                CreditCard cc = new CreditCard(cardholderName, cardholderAddress, creditCardNumber, expiryDate, cvv);
+                ru.addCreditCard(cc);
+            }
+        }
+    }
     @Override
     public String toString() {
         return "UserController{" +
