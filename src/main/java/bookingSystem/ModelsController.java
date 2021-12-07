@@ -1,6 +1,7 @@
 package bookingSystem;
 
 import bookingSystem.models.Movie;
+import bookingSystem.models.Seat;
 import bookingSystem.models.Showtime;
 import bookingSystem.models.Theater;
 import bookingSystem.models.Ticket;
@@ -70,6 +71,21 @@ public class ModelsController {
 		gui.getBookingView().populateSeats(bookingController.getAllSeats(m, t, s));
 	}
 	
+	private void handleBookEvent() {
+		selectedSeat = gui.getBookingView().getSelectedSeatNumber();
+		System.out.println("Selected Seat: " + selectedSeat);
+		paymentAmount += Ticket.getPrice();
+		gui.getPaymentView().setPaymentAmount(paymentAmount);
+	}
+	
+	private void bookTicket() {
+		Movie m = gui.getBookingView().getSelectedMovie();
+		Theater t = gui.getBookingView().getSelectedTheater();
+		Showtime s = gui.getBookingView().getSelectedShowtime();
+		Ticket tic = bookingController.findTicket(m, t, s, new Seat(selectedSeat));
+		bookingController.bookTicket(tic, userId);
+	}
+	
 	private boolean login() {
 		String username = gui.getLoginView().getUsernameText();
 		String password = gui.getLoginView().getPasswordText();
@@ -128,10 +144,7 @@ public class ModelsController {
 				gui.setCard(0);
 				break;
 			case "Book Seat":
-				selectedSeat = gui.getBookingView().getSelectedSeatNumber();
-				System.out.println("Selected Seat: " + selectedSeat);
-				paymentAmount += Ticket.PRICE;
-				gui.getPaymentView().setPaymentAmount(paymentAmount);
+				handleBookEvent();
 				gui.setCard(4);
 				break;
 			case "Choose Movie":
@@ -174,7 +187,7 @@ public class ModelsController {
 					if (ticket == null) {
 						gui.getCancellationView().setResultText("Ticket not found.");
 					} else {
-						//TODO: cancel ticket
+						bookingController.cancelTicket(ticket);
 					}
 				} catch (NumberFormatException ex) {
 					gui.getCancellationView().setResultText("Invalid Ticket Number");
@@ -252,7 +265,7 @@ public class ModelsController {
 				String creditCardNumber = gui.getPaymentView().getCreditCardNumber();
 				//charge credit card
 				//TODO: save payment
-				//TODO: mark ticket as booked
+				bookTicket();
 				//send email with ticket and receipt
 				gui.setCard(0);
 				JOptionPane.showMessageDialog(gui, "Ticket Booked");
