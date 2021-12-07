@@ -1,13 +1,12 @@
 package userSystem.models;
-import java.util.Date;
 public class CreditCard {
     private String cardholderName;
     private String cardholderAddress;
     private String creditCardNumber;
-    private Date expiryDate;
+    private String expiryDate;
     private int ccv;
 
-    public CreditCard(String cardholderName, String cardholderAddress, String creditCardNumber, Date expiryDate, int ccv) {
+    public CreditCard(String cardholderName, String cardholderAddress, String creditCardNumber, String expiryDate, int ccv) {
         this.cardholderName = cardholderName;
         this.cardholderAddress = cardholderAddress;
         this.creditCardNumber = creditCardNumber;
@@ -39,11 +38,11 @@ public class CreditCard {
         this.creditCardNumber = creditCardNumber;
     }
 
-    public Date getExpiryDate() {
+    public String getExpiryDate() {
         return this.expiryDate;
     }
 
-    public void setExpiryDate(Date expiryDate) {
+    public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -54,6 +53,13 @@ public class CreditCard {
     public void setCcv(int ccv) {
         this.ccv = ccv;
     }
-
+    @Override
+    public String toString() {
+        return "name="+cardholderName
+            +" CCnumber="+creditCardNumber
+            +" Address="+cardholderAddress
+            +" ExpiryDate="+expiryDate
+            +" ccv="+ccv;
+    }
 }
 

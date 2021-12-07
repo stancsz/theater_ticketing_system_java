@@ -12,6 +12,7 @@ public class Ticket {
     private Movie movie;
     private Theater theater;
     private Showtime showtime;
+    private static final double PRICE = 20.00;
 
     /**
      * Constructs a Ticket object using the specified values.
@@ -135,6 +136,10 @@ public class Ticket {
      */
     public void setShowtime(Showtime showtime) {
         this.showtime = showtime;
+    }
+    
+    public static double getPrice() {
+    	return PRICE;
     }
 
     public double getPrice() {

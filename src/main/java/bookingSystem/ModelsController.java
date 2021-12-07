@@ -1,8 +1,12 @@
 package bookingSystem;
 
 import bookingSystem.models.Movie;
+import bookingSystem.models.Seat;
 import bookingSystem.models.Showtime;
 import bookingSystem.models.Theater;
+import bookingSystem.models.Ticket;
+import transactionSystem.PaymentController;
+import userSystem.UserController;
 import view.GUI;
 
 import javax.swing.*;
@@ -11,9 +15,12 @@ import java.awt.event.ActionListener;
 
 public class ModelsController {
 	
-	private BookingController tbc;
+	private BookingController bookingController;
+	private UserController userController;
+	private PaymentController paymentController;
 	private GUI gui;
 	private int userId = -1;
+	private int ticketId = -1;
 	private String userEmail = "";
 	private int selectedSeat = -1;
 	private double paymentAmount = 0;
@@ -24,12 +31,14 @@ public class ModelsController {
 	
 	private void run() {
 		gui = new GUI();
-		tbc = new BookingController();
+		bookingController = new BookingController();
+		userController = new UserController();
+		paymentController = new PaymentController();
 		UserButtonListener ubl = new UserButtonListener();
 		gui.getUserView().addButtonsListener(ubl);
 		
 		BookingButtonListener bbl = new BookingButtonListener();
-		gui.getBookingView().populateMovies(tbc.getAllMovies());
+		gui.getBookingView().populateMovies(bookingController.getAllMovies());
 		gui.getBookingView().addButtonsListener(bbl);
 		
 		CancellationButtonListener cbl = new CancellationButtonListener();
@@ -41,6 +50,9 @@ public class ModelsController {
 		RegisterButtonListener rbl = new RegisterButtonListener();
 		gui.getRegisterView().addButtonsListener(rbl);
 		
+		PaymentButtonListener pbl = new PaymentButtonListener();
+		gui.getPaymentView().addButtonsListener(pbl);
+		
 	}
 	
 	
@@ -48,32 +60,52 @@ public class ModelsController {
 	
 	private void handleMovieEvent() {
 		Movie m = gui.getBookingView().getSelectedMovie();
-		gui.getBookingView().populateTheaters(tbc.getAllTheaters(m));
+		gui.getBookingView().populateTheaters(bookingController.getAllTheaters(m));
 	}
 	
 	private void handleTheaterEvent() {
 		Movie m = gui.getBookingView().getSelectedMovie();
 		Theater t = gui.getBookingView().getSelectedTheater();
-		gui.getBookingView().populateShowtimes(tbc.getAllShowtimes(m, t));
+		gui.getBookingView().populateShowtimes(bookingController.getAllShowtimes(m, t));
 	}
 	
 	private void handleShowtimeEvent() {
 		Movie m = gui.getBookingView().getSelectedMovie();
 		Theater t = gui.getBookingView().getSelectedTheater();
 		Showtime s = gui.getBookingView().getSelectedShowtime();
-		gui.getBookingView().populateSeats(tbc.getAllSeats(m, t, s));
+		gui.getBookingView().populateSeats(bookingController.getAllSeats(m, t, s));
+	}
+	
+	private void handleBookEvent() {
+		selectedSeat = gui.getBookingView().getSelectedSeatNumber();
+		System.out.println("Selected Seat: " + selectedSeat);
+		paymentAmount += Ticket.getPrice();
+		gui.getPaymentView().setPaymentAmount(paymentAmount);
+	}
+	
+	private void bookTicket() {
+		Movie m = gui.getBookingView().getSelectedMovie();
+		Theater t = gui.getBookingView().getSelectedTheater();
+		Showtime s = gui.getBookingView().getSelectedShowtime();
+		Ticket tic = bookingController.findTicket(m, t, s, new Seat(selectedSeat));
+		bookingController.bookTicket(tic, userId);
+		ticketId = tic.getTicketNumber();
 	}
 	
 	private boolean login() {
 		String username = gui.getLoginView().getUsernameText();
 		String password = gui.getLoginView().getPasswordText();
 		userId = checkCredentials(username, password);
-		if (userId >= 0) return true;
+		if (userId >= 0) {
+			gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
+			return true;
+		}
 		return false;
 	}
 	
 	private int checkCredentials(String username, String password) {
-		//credential checking not implemented, but return User Id if correct, return -1 if incorrect
+		//NOT IMPLEMENTED: credential checking 
+		// return User Id if correct, return -1 if incorrect
 		return 1;
 	}
 	
@@ -82,12 +114,15 @@ public class ModelsController {
 		String password = gui.getRegisterView().getPasswordText();
 		String name = gui.getRegisterView().getNameText();
 		String address = gui.getRegisterView().getAddressText();
-		//register user
-		//if successful registration
-		userEmail = email;
-		System.out.println("Registered User: " + name);
-		paymentAmount += 20.00;
-		gui.setCard(6);
+		userId = userController.addRegisteredUser(email, name, address);
+		gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
+		if (userId >= 0) {
+			userEmail = email;
+			System.out.println("Registered User: " + name);
+			paymentAmount += 20.00;
+			gui.getPaymentView().setPaymentAmount(paymentAmount);
+			gui.setCard(5);
+		}
 	}
 	
 	
@@ -117,9 +152,7 @@ public class ModelsController {
 				gui.setCard(0);
 				break;
 			case "Book Seat":
-				selectedSeat = gui.getBookingView().getSelectedSeatNumber();
-				System.out.println("Selected Seat: " + selectedSeat);
-				//add 
+				handleBookEvent();
 				gui.setCard(4);
 				break;
 			case "Choose Movie":
@@ -156,7 +189,18 @@ public class ModelsController {
 				gui.setCard(0);
 				break;
 			case "Cancel Ticket":
-				//cancel ticket
+				try {
+					int ticketNumber = gui.getCancellationView().getTicketNumber();
+					Ticket ticket = bookingController.findTicket(ticketNumber);
+					if ((ticket == null)||(ticket.getSeat().isAvailable())) {
+						gui.getCancellationView().setResultText("Ticket not found.");
+					} else {
+						bookingController.cancelTicket(ticket);
+						gui.getCancellationView().setResultText("Ticket " + ticketNumber + " cancelled.");
+					}
+				} catch (NumberFormatException ex) {
+					gui.getCancellationView().setResultText("Invalid Ticket Number");
+				}
 				break;
 			}
 		}
@@ -181,15 +225,19 @@ public class ModelsController {
 					userEmail = gui.getLoginView().getUsernameText();
 					gui.setCard(5);
 				} else {
-					JOptionPane.showMessageDialog(gui, "Invalid credentials");
+					JOptionPane.showMessageDialog(gui, "Invalid credentials.");
 				}
+				break;
 			case "Continue as Guest":
 				userEmail = gui.getLoginView().getUsernameText();
 				if (userEmail.equals("")) {
-					JOptionPane.showMessageDialog(gui, "Please Enter an Email");
+					JOptionPane.showMessageDialog(gui, "Please Enter an Email.");
 				} else {
+					userId = userController.addUser(userEmail);
+					gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
 					gui.setCard(5);
 				}
+				break;
 			}
 		}
 		
@@ -209,6 +257,37 @@ public class ModelsController {
 				handleRegisterEvent();
 				break;
 			}
+		}
+		
+	}
+	
+	private class PaymentButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String command = e.getActionCommand();
+			System.out.println(command);
+			switch (command) {
+			case "Back":
+				gui.setCard(4);
+				break;
+			case "Pay":
+				String creditCardNumber = gui.getPaymentView().getCreditCardNumber();
+				System.out.println(creditCardNumber);
+				if ((creditCardNumber == null) || (creditCardNumber.length() < 16)) {
+					JOptionPane.showMessageDialog(gui, "Please enter a valid credit card number.");
+				} else {
+					//NOT IMPLEMENTED: actually charging credit cards
+					bookTicket();
+					paymentController.charge(userId, ticketId);
+					gui.getBookingView().depopulateTheaters();
+					//NOT IMPLEMENTED: send email with ticket and receipt
+					gui.setCard(0);
+					JOptionPane.showMessageDialog(gui, "Ticket number " + ticketId + " Booked.");
+				}
+				break;
+			}
+			
 		}
 		
 	}
