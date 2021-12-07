@@ -21,11 +21,15 @@ public class BookingView extends JPanel {
 	private JComboBox<Movie> movieBox;
 	private JComboBox<Theater> theaterBox;
 	private JComboBox<Showtime> showtimeBox;
+	private JButton movieButton;
+	private JButton theaterButton;
+	private JButton showtimeButton;
 	private JButton bookButton;
 	private JPanel seatPanel;
 	private ArrayList<JButton> seatButtons;
 	private int selectedSeatIndex;
 	private SeatButtonListener seatButtonListener;
+	private JButton backButton;
 	
 	public BookingView() {
 		setLayout(new BorderLayout());
@@ -33,18 +37,21 @@ public class BookingView extends JPanel {
 		//Build top panel with dropdown menus to select movie, theater, and showtime.
 		JPanel topPanel = new JPanel();
 		topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.X_AXIS));
-		JLabel movieLabel = new JLabel("Select Movie: ");
-		JLabel theaterLabel = new JLabel("Select Theater: ");
-		JLabel showtimeLabel = new JLabel("Select Showtime: ");
 		movieBox = new JComboBox<Movie>();
 		theaterBox = new JComboBox<Theater>();
 		showtimeBox = new JComboBox<Showtime>();
-		topPanel.add(movieLabel);
+		movieButton = new JButton("Choose Movie");
+		theaterButton = new JButton("Choose Theater");
+		showtimeButton = new JButton("Choose Showtime");
 		topPanel.add(movieBox);
-		topPanel.add(theaterLabel);
+		topPanel.add(movieButton);
+		topPanel.add(Box.createRigidArea(new Dimension(15,0)));
 		topPanel.add(theaterBox);
-		topPanel.add(showtimeLabel);
+		topPanel.add(theaterButton);
+		topPanel.add(Box.createRigidArea(new Dimension(15,0)));
 		topPanel.add(showtimeBox);
+		topPanel.add(showtimeButton);
+		movieBox.setEnabled(false);
 		theaterBox.setEnabled(false);
 		showtimeBox.setEnabled(false);
 		add(topPanel, BorderLayout.NORTH);
@@ -70,13 +77,26 @@ public class BookingView extends JPanel {
 		reservedSquare.setEnabled(false);		
 		bookButton = new JButton("Book Seat");
 		bookButton.setEnabled(false);
-		bottomPanel.add(availableLabel);
-		bottomPanel.add(availableSquare);
-		bottomPanel.add(selectedLabel);
-		bottomPanel.add(selectedSquare);
-		bottomPanel.add(reservedLabel);
-		bottomPanel.add(reservedSquare);
+		backButton = new JButton("Back");
+		JPanel legendPanel = new JPanel();
+		legendPanel.add(availableLabel);
+		legendPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		legendPanel.add(availableSquare);
+		legendPanel.add(Box.createRigidArea(new Dimension(10,0)));
+		legendPanel.add(selectedLabel);
+		legendPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		legendPanel.add(selectedSquare);
+		legendPanel.add(Box.createRigidArea(new Dimension(10,0)));
+		legendPanel.add(reservedLabel);
+		legendPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		legendPanel.add(reservedSquare);
+		bottomPanel.add(Box.createRigidArea(new Dimension(5,0)));
+		bottomPanel.add(backButton);
+		bottomPanel.add(Box.createRigidArea(new Dimension(50,0)));
+		bottomPanel.add(legendPanel);
+		bottomPanel.add(Box.createRigidArea(new Dimension(10,0)));
 		bottomPanel.add(bookButton);
+		bottomPanel.add(Box.createRigidArea(new Dimension(5,0)));
 		add(bottomPanel, BorderLayout.SOUTH);
 		
 		
@@ -92,6 +112,7 @@ public class BookingView extends JPanel {
 		for (Movie movie : movies) {
 			movieBox.addItem(movie);
 		}
+		movieBox.setEnabled(true);
 	}
 	
 	public void populateTheaters(ArrayList<Theater> theaters) {
@@ -101,12 +122,14 @@ public class BookingView extends JPanel {
 			theaterBox.addItem(theater);
 		}
 		theaterBox.setEnabled(true);
+		theaterButton.setEnabled(true);
 	}
 	
 	private void depopulateTheaters() {
 		depopulateShowtimes();
 		theaterBox.removeAllItems();
 		theaterBox.setEnabled(false);
+		theaterButton.setEnabled(false);
 	}
 	public void populateShowtimes(ArrayList<Showtime> showtimes) {
 		showtimeBox.removeAllItems();
@@ -115,12 +138,14 @@ public class BookingView extends JPanel {
 			showtimeBox.addItem(showtime);
 		}
 		showtimeBox.setEnabled(true);
+		showtimeButton.setEnabled(true);
 	}
 	
 	private void depopulateShowtimes() {
 		depopulateSeats();
 		showtimeBox.removeAllItems();
 		showtimeBox.setEnabled(false);
+		showtimeButton.setEnabled(false);
 	}
 	
 	public void populateSeats(ArrayList<Seat> seats) {
@@ -161,20 +186,13 @@ public class BookingView extends JPanel {
 	public int getSelectedSeatNumber() {
 		return Integer.parseInt(seatButtons.get(selectedSeatIndex).getText());
 	}
-	public void addMovieBoxListener(ActionListener l) {
-		movieBox.addActionListener(l);
-	}
 	
-	public void addTheaterBoxListener(ActionListener l) {
-		theaterBox.addActionListener(l);
-	}
-	
-	public void addShowtimeBoxListener(ActionListener l) {
-		showtimeBox.addActionListener(l);
-	}
-	
-	public void addBookListener(ActionListener l) {
+	public void addButtonsListener(ActionListener l) {
+		movieButton.addActionListener(l);
+		theaterButton.addActionListener(l);
+		showtimeButton.addActionListener(l);
 		bookButton.addActionListener(l);
+		backButton.addActionListener(l);
 	}
 	
 	class SeatButtonListener implements ActionListener {
