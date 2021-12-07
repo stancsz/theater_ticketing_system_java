@@ -4,12 +4,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
+/**
+ * Class representing main menu view of movie booking system.
+ * @author David Cooksley
+ *
+ */
 @SuppressWarnings("serial")
 public class UserView extends JPanel {
 	
 	private JButton bookingButton;
 	private JButton cancelButton;
 	
+	/**
+	 * Constructor. Initializes components, builds and organizes UI layout. 
+	 */
 	public UserView() {
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		setAlignmentX(CENTER_ALIGNMENT);
@@ -32,6 +40,10 @@ public class UserView extends JPanel {
 		add(cancelButtonPanel);
 	}
 	
+	/**
+	 * Adds ActionListener to the buttons on this page.
+	 * @param l: ActionListener to handle button events
+	 */
 	public void addButtonsListener(ActionListener l) {
 		bookingButton.addActionListener(l);
 		cancelButton.addActionListener(l);

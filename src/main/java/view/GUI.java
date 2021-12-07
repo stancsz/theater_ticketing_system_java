@@ -6,6 +6,12 @@ import java.awt.CardLayout;
 import java.awt.Insets;
 
 
+/**
+ * Class that in the main GUI frame for movie booking system.
+ * Holds all views and handles switching between them.
+ * @author David Cooksley
+ *
+ */
 @SuppressWarnings("serial")
 public class GUI extends JFrame {
 	private UserView userView;
@@ -23,6 +29,10 @@ public class GUI extends JFrame {
 	private static final String LOGIN_STRING = "Login";
 	private static final String PAYMENT_STRING = "Payment";
 	
+	
+	/**
+	 * Constructor. Initializes all views and collects in CardLayout
+	 */
 	public GUI() {
 		super("Movie Booking System");
 		
@@ -48,6 +58,10 @@ public class GUI extends JFrame {
 		setVisible(true);
 	}
 	
+	/**
+	 * Changes current card in CardLayout
+	 * @param i: card index to change to
+	 */
 	public void setCard(int i) {
 		switch (i) {
 		case 0:
@@ -71,26 +85,27 @@ public class GUI extends JFrame {
 		}
 	}
 	
+	
+	
+	/**
+	 * Set of getters for each view.
+	 * Used by controller to access view methods.
+	 */
 	public UserView getUserView() {
 		return userView;
 	}
-
 	public BookingView getBookingView() {
 		return bookingView;
 	}
-
 	public CancellationView getCancellationView() {
 		return cancellationView;
 	}
-
 	public RegisterView getRegisterView() {
 		return registerView;
-	}
-	
+	}	
 	public LoginView getLoginView() {
 		return loginView;
-	}
-	
+	}	
 	public PaymentView getPaymentView() {
 		return paymentView;
 	}
