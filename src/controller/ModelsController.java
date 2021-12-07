@@ -5,7 +5,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
-import BookingSystemModel.*;
+import bookingSystem.*;
+import bookingSystem.models.Movie;
+import bookingSystem.models.Showtime;
+import bookingSystem.models.Theater;
 import view.GUI;
 
 public class ModelsController {

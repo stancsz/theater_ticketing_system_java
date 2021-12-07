@@ -10,10 +10,10 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 
-import BookingSystemModel.Movie;
-import BookingSystemModel.Seat;
-import BookingSystemModel.Showtime;
-import BookingSystemModel.Theater;
+import bookingSystem.models.Movie;
+import bookingSystem.models.Seat;
+import bookingSystem.models.Showtime;
+import bookingSystem.models.Theater;
 
 @SuppressWarnings("serial")
 public class BookingView extends JPanel {
