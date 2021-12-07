@@ -8,6 +8,7 @@ public class Ticket {
     private Movie movie;
     private Theater theater;
     private Showtime showtime;
+    private static final double PRICE = 20.00;
 
     public Ticket(int ticketNumber, Seat seat, Movie movie, Theater theater, Showtime showtime) {
         this.ticketNumber = ticketNumber;
@@ -75,6 +76,10 @@ public class Ticket {
 
     public void setShowtime(Showtime showtime) {
         this.showtime = showtime;
+    }
+    
+    public static double getPrice() {
+    	return PRICE;
     }
 
 }
