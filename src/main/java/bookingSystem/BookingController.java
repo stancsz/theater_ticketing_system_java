@@ -200,10 +200,16 @@ public class BookingController {
          return null;
     }
 
-    public void bookTicket(Ticket t, UserDummy u){
+    public void bookTicket(Ticket t, int userID){
         t.getSeat().setAvailable(false);
-        t.setUserId(u.getUserId());
+        t.setUserId(userID);
     }
+
+    public void cancelTicket(Ticket t){
+        t.getSeat().setAvailable(true);
+        t.setUserId(0);
+    }
+
 
     public Ticket findTicket(Movie m, Theater t, Showtime s, Seat st){
         for(Ticket ticket: tickets){
