@@ -317,5 +317,16 @@ public class UserController{
                 ", listOfUsers=" + listOfUsers +
                 '}';
     }
+    
+    public ArrayList<CreditCard> getCreditCards(int userId) {
+    	ArrayList<CreditCard> cardList = new ArrayList<CreditCard>();
+    	for (RegisteredUser ru: listOfRegisteredUsers){
+            if(ru.getUserId()==userId){
+                cardList = ru.getListOfCreditCards();
+                break;
+            }
+        }
+    	return cardList;
+    }
 }
 
