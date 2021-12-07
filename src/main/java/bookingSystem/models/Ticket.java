@@ -142,7 +142,4 @@ public class Ticket {
     	return PRICE;
     }
 
-    public double getPrice() {
-        return 20.0;
-    }
 }
