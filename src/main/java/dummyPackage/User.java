@@ -1,5 +1,7 @@
 package dummyPackage;
 
+
+// TODO: integrate user with real user
 public class User {
     private Integer id;
 

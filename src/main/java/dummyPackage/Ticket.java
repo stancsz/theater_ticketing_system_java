@@ -1,5 +1,7 @@
 package dummyPackage;
 
+
+// TODO: integrate dummy ticket with real ticket
 public class Ticket {
     private double price;
     private Integer id;

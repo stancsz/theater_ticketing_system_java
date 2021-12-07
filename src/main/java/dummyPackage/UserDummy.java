@@ -1,7 +1,8 @@
-package BookingSystemModel;
+package dummyPackage;
 
 // DUMMY CLASS
-public class User {
+// TODO: integrate dummy with real class
+public class UserDummy {
 
     private int userId;
 

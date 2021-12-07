@@ -1,4 +1,4 @@
-package BookingSystemModel;
+package bookingSystem.models;
 
 import java.util.ArrayList;
 
@@ -33,15 +33,15 @@ public class Movie {
         theaters.add(t);
     }
 
-    @Override
-    public boolean equals(Object o){
-        Movie m = (Movie) o;
-        if (name.equals(m.getName())){
-            return true;
-        } else{
-            return false;
-        }
-    }
+//    @Override
+//    public boolean equals(Object o){
+//        Movie m = (Movie) o;
+//        if (name.equals(m.getName())){
+//            return true;
+//        } else{
+//            return false;
+//        }
+//    }
 
     @Override
     public String toString(){

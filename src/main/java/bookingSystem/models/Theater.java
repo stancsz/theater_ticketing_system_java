@@ -1,4 +1,4 @@
-package BookingSystemModel;
+package bookingSystem.models;
 
 import java.util.ArrayList;
 
@@ -32,15 +32,15 @@ public class Theater {
         showtimes.add(s);
     }
 
-    @Override
-    public boolean equals(Object o){
-        Theater t = (Theater) o;
-        if (location.equals(t.getLocation())){
-            return true;
-        } else{
-            return false;
-        }
-    }
+//    @Override
+//    public boolean equals(Object o){
+//        Theater t = (Theater) o;
+//        if (location.equals(t.getLocation())){
+//            return true;
+//        } else{
+//            return false;
+//        }
+//    }
 
     @Override
     public String toString(){

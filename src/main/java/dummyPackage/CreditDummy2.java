@@ -1,12 +1,14 @@
-package userSystem.models;
+package dummyPackage;
 
 import java.util.Date;
 
-public class Credit {
+
+// TODO: integrate this dummy class
+public class CreditDummy2 {
     private double credit;
     private Date expiryDate;
 
-    public Credit(double credit, Date expiryDate) {
+    public CreditDummy2(double credit, Date expiryDate) {
         this.credit = credit;
         this.expiryDate = expiryDate;
     }

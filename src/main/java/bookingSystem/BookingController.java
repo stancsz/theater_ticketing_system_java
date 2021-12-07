@@ -1,4 +1,7 @@
-package BookingSystemModel;
+package bookingSystem;
+
+import bookingSystem.models.*;
+import dummyPackage.UserDummy;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -197,7 +200,7 @@ public class BookingController {
          return null;
     }
 
-    public void bookTicket(Ticket t, User u){
+    public void bookTicket(Ticket t, UserDummy u){
         t.getSeat().setAvailable(false);
         t.setUserId(u.getUserId());
     }
@@ -250,5 +253,13 @@ public class BookingController {
             }
         }
         return seats;
+    }
+
+    @Override
+    public String toString() {
+        return "BookingController{" +
+                "tickets=" + tickets +
+                ", movies=" + movies +
+                '}';
     }
 }

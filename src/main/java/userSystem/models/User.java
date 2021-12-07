@@ -1,20 +1,23 @@
 package userSystem.models;
 
+import dummyPackage.CreditDummy2;
+import dummyPackage.TicketDummy2;
+
 import java.util.ArrayList;
 public class User {
     protected int userId;
     protected String eMail;
-    protected ArrayList<Credit> listOfCredits;    
-    protected ArrayList<Ticket> listOfTickets;    
+    protected ArrayList<CreditDummy2> listOfCredits;
+    protected ArrayList<TicketDummy2> listOfTickets;
 
     public User(int userId, String eMail) {
         setUserId(userId);
         setEMail(eMail);
-        this.listOfCredits = new ArrayList<Credit>();
-        this.listOfTickets = new ArrayList<Ticket>();
+        this.listOfCredits = new ArrayList<CreditDummy2>();
+        this.listOfTickets = new ArrayList<TicketDummy2>();
     }
 
-    public User(int userId, String eMail, ArrayList<Credit> listOfCredits, ArrayList<Ticket> listOfTickets) {
+    public User(int userId, String eMail, ArrayList<CreditDummy2> listOfCredits, ArrayList<TicketDummy2> listOfTickets) {
         setUserId(userId);
         setEMail(eMail);
         setListOfCredits(listOfCredits);
@@ -23,7 +26,7 @@ public class User {
 
     public double getTotalCreditAmount(){
         double totalCredits =0;
-        for (Credit c: listOfCredits){
+        for (CreditDummy2 c: listOfCredits){
             //TODO check if expired
             //
             totalCredits=+c.getCredit();
@@ -47,27 +50,27 @@ public class User {
         this.eMail = eMail;
     }
 
-    public void addCredit(Credit credit){
+    public void addCredit(CreditDummy2 credit){
         this.listOfCredits.add(credit);
     }
 
-    public ArrayList<Credit> getListOfCredits() {
+    public ArrayList<CreditDummy2> getListOfCredits() {
         return this.listOfCredits;
     }
 
-    public void setListOfCredits(ArrayList<Credit> listOfCredits) {
+    public void setListOfCredits(ArrayList<CreditDummy2> listOfCredits) {
         this.listOfCredits = listOfCredits;
     }
 
-    public void addTicket(Ticket ticket){
+    public void addTicket(TicketDummy2 ticket){
         this.listOfTickets.add(ticket);
     }
 
-    public ArrayList<Ticket> getListOfTickets() {
+    public ArrayList<TicketDummy2> getListOfTickets() {
         return this.listOfTickets;
     }
 
-    public void setListOfTickets(ArrayList<Ticket> listOfTickets) {
+    public void setListOfTickets(ArrayList<TicketDummy2> listOfTickets) {
         this.listOfTickets = listOfTickets;
     }
     @Override

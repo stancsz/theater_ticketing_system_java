@@ -1,4 +1,4 @@
-package BookingSystemModel;
+package bookingSystem.models;
 
 import java.util.ArrayList;
 
@@ -42,15 +42,15 @@ public class Showtime {
         seats.add(s);
     }
 
-    @Override
-    public boolean equals(Object o){
-        Showtime s = (Showtime) o;
-        if (startTime.equals(s.getStartTime())){
-            return true;
-        } else{
-            return false;
-        }
-    }
+//    @Override
+//    public boolean equals(Object o){
+//        Showtime s = (Showtime) o;
+//        if (startTime.equals(s.getStartTime())){
+//            return true;
+//        } else{
+//            return false;
+//        }
+//    }
 
     @Override
     public String toString(){

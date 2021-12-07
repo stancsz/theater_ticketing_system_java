@@ -1,4 +1,4 @@
-package BookingSystemModel;
+package bookingSystem.models;
 
 public class Ticket {
 

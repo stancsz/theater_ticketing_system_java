@@ -1,9 +1,11 @@
-package userSystem.models;
+package dummyPackage;
+
+// TODO: integrate this dummy class with real ticket class
 //temp ticket 
-public class Ticket {
+public class TicketDummy2 {
     private int ticketId; 
     private double price; 
-    public Ticket(int ticketId){
+    public TicketDummy2(int ticketId){
         setTicketId(ticketId);
     }
 
