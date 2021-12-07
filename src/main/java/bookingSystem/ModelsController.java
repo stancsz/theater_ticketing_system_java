@@ -1,19 +1,17 @@
-package controller;
+package bookingSystem;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JOptionPane;
-
-import bookingSystem.*;
 import bookingSystem.models.Movie;
 import bookingSystem.models.Showtime;
 import bookingSystem.models.Theater;
 import view.GUI;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 public class ModelsController {
 	
-	private TestBookingController tbc;
+	private BookingController tbc;
 	private GUI gui;
 	private int userId = -1;
 	private String userEmail = "";
@@ -26,7 +24,7 @@ public class ModelsController {
 	
 	private void run() {
 		gui = new GUI();
-		tbc = new TestBookingController();
+		tbc = new BookingController();
 		UserButtonListener ubl = new UserButtonListener();
 		gui.getUserView().addButtonsListener(ubl);
 		

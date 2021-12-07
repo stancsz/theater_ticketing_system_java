@@ -1,10 +1,8 @@
 package view;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
 
 @SuppressWarnings("serial")
 public class UserView extends JPanel {
