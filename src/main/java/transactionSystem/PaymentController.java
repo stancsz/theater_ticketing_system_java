@@ -1,8 +1,8 @@
 package transactionSystem;
 
 import database.Controller;
-import dummyPackage.Ticket;
-import dummyPackage.User;
+import bookingSystem.models.Ticket;
+import userSystem.models.User;
 import transactionSystem.models.Credit;
 import transactionSystem.models.Payment;
 
@@ -104,7 +104,7 @@ public class PaymentController {
         Set<Integer> ids = payments.keySet().stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet()); // getting int set
         Integer newID = Collections.max(ids) + 1; // get an new id for payment table
 
-        Payment newPayment = new Payment(newID, ticket.getPrice(), user.getId(), ticket.getId());
+        Payment newPayment = new Payment(newID, ticket.getPrice(), user.getUserId(), ticket.getTicketNumber());
         addPayment(newPayment);
     }
 
@@ -179,7 +179,7 @@ public class PaymentController {
     public Payment findPayment(Ticket ticket) {
         Connection conn = Controller.getConnection();
         String sql = "SELECT paymentID FROM payment " +
-                String.format("WHERE ticketID = %s ;", ticket.getId());
+                String.format("WHERE ticketID = %s ;", ticket.getTicketNumber());
         System.out.println(sql);
         Statement stmt = null;
         Integer paymentID = -1;

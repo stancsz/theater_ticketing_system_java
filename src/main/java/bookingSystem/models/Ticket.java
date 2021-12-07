@@ -77,4 +77,7 @@ public class Ticket {
         this.showtime = showtime;
     }
 
+    public double getPrice() {
+        return 20.0;
+    }
 }
