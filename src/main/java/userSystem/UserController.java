@@ -252,5 +252,13 @@ public class UserController{
         int rs = stmt.executeUpdate(sql);
         conn.close();
     }
+
+    @Override
+    public String toString() {
+        return "UserController{" +
+                "listOfRegisteredUsers=" + listOfRegisteredUsers +
+                ", listOfUsers=" + listOfUsers +
+                '}';
+    }
 }
 
