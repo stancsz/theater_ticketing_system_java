@@ -8,6 +8,11 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Class representing page to cancel a ticket in movie booking system.
+ * @author David Cooksley
+ *
+ */
 @SuppressWarnings("serial")
 public class CancellationView extends JPanel {
 	
@@ -16,6 +21,9 @@ public class CancellationView extends JPanel {
 	private JButton cancelTicketButton;
 	private JButton backButton;
 	
+	/**
+	 * Constructor. Initializes components, builds and organizes UI layout. 
+	 */
 	public CancellationView() {
 		setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 		this.setAlignmentX(CENTER_ALIGNMENT);
@@ -51,14 +59,25 @@ public class CancellationView extends JPanel {
 		add(backButtonPanel);
 	}
 	
+	/**
+	 * @return ticket number entered by user
+	 */
 	public int getTicketNumber() {
 		return Integer.parseInt(ticketNumField.getText());
 	}
 	
+	/**
+	 * Sets the text in the response area
+	 * @param text: desired text
+	 */
 	public void setResultText(String text) {
 			resultText.setText(text);
 	}
 	
+	/**
+	 * Adds ActionListener to all buttons on this page.
+	 * @param l: ActionListener to handle button events.
+	 */
 	public void addButtonsListener(ActionListener l) {
 		cancelTicketButton.addActionListener(l);
 		backButton.addActionListener(l);

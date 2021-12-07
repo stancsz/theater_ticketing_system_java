@@ -15,6 +15,11 @@ import bookingSystem.models.Seat;
 import bookingSystem.models.Showtime;
 import bookingSystem.models.Theater;
 
+/**
+ * Class representing ticket booking page of movie booking system.
+ * @author David Cooksley
+ *
+ */
 @SuppressWarnings("serial")
 public class BookingView extends JPanel {
 	
@@ -31,6 +36,9 @@ public class BookingView extends JPanel {
 	private SeatButtonListener seatButtonListener;
 	private JButton backButton;
 	
+	/**
+	 * Constructor. Initializes components, builds and organizes UI layout. 
+	 */
 	public BookingView() {
 		setLayout(new BorderLayout());
 		
@@ -106,6 +114,10 @@ public class BookingView extends JPanel {
 		selectedSeatIndex = -1;
 	}
 	
+	/**
+	 * Populates combobox of movie selections.
+	 * @param movies: list of movies
+	 */
 	public void populateMovies(ArrayList<Movie> movies) {
 		movieBox.removeAllItems();
 		depopulateTheaters();
@@ -115,6 +127,11 @@ public class BookingView extends JPanel {
 		movieBox.setEnabled(true);
 	}
 	
+	
+	/**
+	 * Populates combobox of theater selections.
+	 * @param theaters: list of theaters for selected movie
+	 */
 	public void populateTheaters(ArrayList<Theater> theaters) {
 		theaterBox.removeAllItems();
 		depopulateShowtimes();
@@ -125,12 +142,22 @@ public class BookingView extends JPanel {
 		theaterButton.setEnabled(true);
 	}
 	
+	
+	/**
+	 * Depopulates theater box, and consequentially everything dependent on theater selection.
+	 */
 	public void depopulateTheaters() {
 		depopulateShowtimes();
 		theaterBox.removeAllItems();
 		theaterBox.setEnabled(false);
 		theaterButton.setEnabled(false);
 	}
+	
+	
+	/**
+	 * Populates combobox of showtime selections.
+	 * @param showtimes: list of showtimes for selected movie and theater
+	 */
 	public void populateShowtimes(ArrayList<Showtime> showtimes) {
 		showtimeBox.removeAllItems();
 		depopulateSeats();
@@ -141,6 +168,10 @@ public class BookingView extends JPanel {
 		showtimeButton.setEnabled(true);
 	}
 	
+	
+	/**
+	 * Depopulates showtimes and seats.
+	 */
 	private void depopulateShowtimes() {
 		depopulateSeats();
 		showtimeBox.removeAllItems();
@@ -148,6 +179,10 @@ public class BookingView extends JPanel {
 		showtimeButton.setEnabled(false);
 	}
 	
+	/**
+	 * Populates panel of seat buttons. Seats are arranged into rows of 10
+	 * @param seats: list of seats for selected movie, theater, and showtime
+	 */
 	public void populateSeats(ArrayList<Seat> seats) {
 		seatButtons = new ArrayList<JButton>();
 		seatPanel.removeAll();
@@ -166,27 +201,46 @@ public class BookingView extends JPanel {
 		}
 	}
 	
+	/**
+	 * Depopulates seat panel.
+	 */
 	private void depopulateSeats() {
 		seatPanel.removeAll();
 		bookButton.setEnabled(false);
 	}
 	
+	/**
+	 * @return movie selection from combobox
+	 */
 	public Movie getSelectedMovie() {
 		return (Movie)movieBox.getSelectedItem();
 	}
 	
+	/**
+	 * @return theater selection from combobox
+	 */
 	public Theater getSelectedTheater() {
 		return (Theater)theaterBox.getSelectedItem();
 	}
 	
+	/**
+	 * @return showtime selection from combobox
+	 */
 	public Showtime getSelectedShowtime() {
 		return (Showtime)showtimeBox.getSelectedItem();
 	}
 	
+	/**
+	 * @return number of selected seat
+	 */
 	public int getSelectedSeatNumber() {
 		return Integer.parseInt(seatButtons.get(selectedSeatIndex).getText());
 	}
 	
+	/**
+	 * Adds ActionListener to all buttons on this page.
+	 * @param l: ActionListener to handle button events.
+	 */
 	public void addButtonsListener(ActionListener l) {
 		movieButton.addActionListener(l);
 		theaterButton.addActionListener(l);
@@ -195,7 +249,15 @@ public class BookingView extends JPanel {
 		backButton.addActionListener(l);
 	}
 	
-	class SeatButtonListener implements ActionListener {
+	
+	/**
+	 * Private ActionListener class that handles the actions of the buttons in the seat panel.
+	 * Clicking a button makes it green, and sets it to the selected seat. 
+	 * If another was previously selected, it is reset to normal.
+	 * Clicking on the selected seat will deselect it.
+	 *
+	 */
+	private class SeatButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			JButton seatButton = (JButton)e.getSource();
