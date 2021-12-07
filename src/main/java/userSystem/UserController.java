@@ -1,5 +1,5 @@
 package userSystem;
-import dummyPackage.TicketDummy2;
+import bookingSystem.models.Ticket;
 import userSystem.models.*;
 import java.util.ArrayList;
 import java.sql.*;
@@ -89,10 +89,10 @@ public class UserController{
      * @param user
      * @param ticket
      */
-    public void addTicketBooking(User user, TicketDummy2 ticket){
+    public void addTicketBooking(User user, Ticket ticket){
         user.getListOfTickets().add(ticket);
         try {
-            addTicketBookingToDB(user.getUserId(), ticket.getTicketId());
+            addTicketBookingToDB(user.getUserId(), ticket.getTicketNumber());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -104,10 +104,10 @@ public class UserController{
      * @param user
      * @param ticket
      */
-    public void removeTicketBooking(User user, TicketDummy2 ticket){
+    public void removeTicketBooking(User user, Ticket ticket){
         user.getListOfTickets().remove(ticket);
         try {
-            removeTicketBookingFromDB(user.getUserId(), ticket.getTicketId());
+            removeTicketBookingFromDB(user.getUserId(), ticket.getTicketNumber());
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
