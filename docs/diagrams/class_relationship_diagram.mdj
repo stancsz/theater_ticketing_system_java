@@ -3302,7 +3302,7 @@
 											"top": 604,
 											"width": 57.80810546875,
 											"height": 13,
-											"text": "Database"
+											"text": "database"
 										},
 										{
 											"_type": "LabelView",
@@ -3482,7 +3482,7 @@
 											"top": 38,
 											"width": 695,
 											"height": 13,
-											"text": "BookingSystemModel"
+											"text": "bookingSystem"
 										},
 										{
 											"_type": "LabelView",
@@ -9906,7 +9906,7 @@
 											"top": 437.5,
 											"width": 163.998046875,
 											"height": 13,
-											"text": "(from BookingSystemModel)"
+											"text": "(from bookingSystem)"
 										},
 										{
 											"_type": "LabelView",
@@ -11191,7 +11191,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF17mY9/alQc0c="
 							},
-							"name": "Database",
+							"name": "database",
 							"stereotype": "Model"
 						}
 					]
@@ -12000,7 +12000,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF9Ww/N4RmwetI="
 							},
-							"name": "BookingSystemModel",
+							"name": "bookingSystem",
 							"ownedElements": [
 								{
 									"_type": "UMLClass",
@@ -19055,7 +19055,7 @@
 					"_parent": {
 						"$ref": "AAAAAAFF+qBWK6M3Z8Y="
 					},
-					"name": "Database",
+					"name": "database",
 					"ownedViews": [
 						{
 							"_type": "UMLPackageView",
@@ -19203,7 +19203,7 @@
 											"top": 190,
 											"width": 51.2763671875,
 											"height": 13,
-											"text": "Database"
+											"text": "database"
 										},
 										{
 											"_type": "LabelView",
@@ -19393,7 +19393,7 @@
 											"top": 150,
 											"width": 695,
 											"height": 13,
-											"text": "BookingSystemModel"
+											"text": "bookingSystem"
 										},
 										{
 											"_type": "LabelView",

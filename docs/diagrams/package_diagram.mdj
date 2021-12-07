@@ -467,7 +467,7 @@
 											"top": 1366,
 											"width": 487,
 											"height": 13,
-											"text": "Database"
+											"text": "database"
 										},
 										{
 											"_type": "LabelView",
@@ -776,7 +776,7 @@
 											"top": 910,
 											"width": 455,
 											"height": 13,
-											"text": "BookingSystemModel"
+											"text": "bookingSystem"
 										},
 										{
 											"_type": "LabelView",
@@ -1496,7 +1496,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF9Y0fcSAvZZn0="
 							},
-							"name": "BookingSystemModel",
+							"name": "bookingSystem",
 							"ownedElements": [
 								{
 									"_type": "UMLDependency",
@@ -1534,7 +1534,7 @@
 					"_parent": {
 						"$ref": "AAAAAAF9Yu+IeAnfaXM="
 					},
-					"name": "Database"
+					"name": "database"
 				},
 				{
 					"_type": "UMLPackage",

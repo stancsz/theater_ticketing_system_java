@@ -185,7 +185,7 @@
 													"top": 47,
 													"width": 180.5107421875,
 													"height": 13,
-													"text": "Database"
+													"text": "database"
 												},
 												{
 													"_type": "LabelView",
@@ -1520,7 +1520,7 @@
 							"_parent": {
 								"$ref": "AAAAAAF9Y6YD+IYhp90="
 							},
-							"name": "Database",
+							"name": "database",
 							"represent": {
 								"$ref": "AAAAAAF9Y61nvIZ4N1I="
 							},
