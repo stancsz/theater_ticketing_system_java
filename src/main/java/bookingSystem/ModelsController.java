@@ -5,6 +5,7 @@ import bookingSystem.models.Seat;
 import bookingSystem.models.Showtime;
 import bookingSystem.models.Theater;
 import bookingSystem.models.Ticket;
+import transactionSystem.PaymentController;
 import userSystem.UserController;
 import view.GUI;
 
@@ -16,8 +17,10 @@ public class ModelsController {
 	
 	private BookingController bookingController;
 	private UserController userController;
+	private PaymentController paymentController;
 	private GUI gui;
 	private int userId = -1;
+	private int ticketId = -1;
 	private String userEmail = "";
 	private int selectedSeat = -1;
 	private double paymentAmount = 0;
@@ -84,6 +87,7 @@ public class ModelsController {
 		Showtime s = gui.getBookingView().getSelectedShowtime();
 		Ticket tic = bookingController.findTicket(m, t, s, new Seat(selectedSeat));
 		bookingController.bookTicket(tic, userId);
+		ticketId = tic.getTicketNumber();
 	}
 	
 	private boolean login() {
@@ -99,7 +103,8 @@ public class ModelsController {
 	}
 	
 	private int checkCredentials(String username, String password) {
-		//credential checking not implemented, but return User Id if correct, return -1 if incorrect
+		//NOT IMPLEMENTED: credential checking 
+		// return User Id if correct, return -1 if incorrect
 		return 1;
 	}
 	
@@ -263,10 +268,10 @@ public class ModelsController {
 				break;
 			case "Pay":
 				String creditCardNumber = gui.getPaymentView().getCreditCardNumber();
-				//charge credit card
-				//TODO: save payment
 				bookTicket();
-				//send email with ticket and receipt
+				paymentController.charge(userId, ticketId);
+				gui.getBookingView().depopulateTheaters();
+				//NOT IMPLEMENTED: send email with ticket and receipt
 				gui.setCard(0);
 				JOptionPane.showMessageDialog(gui, "Ticket Booked");
 				break;

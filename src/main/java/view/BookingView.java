@@ -125,7 +125,7 @@ public class BookingView extends JPanel {
 		theaterButton.setEnabled(true);
 	}
 	
-	private void depopulateTheaters() {
+	public void depopulateTheaters() {
 		depopulateShowtimes();
 		theaterBox.removeAllItems();
 		theaterBox.setEnabled(false);
