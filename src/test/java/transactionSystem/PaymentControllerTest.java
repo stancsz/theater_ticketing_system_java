@@ -1,15 +1,9 @@
 package transactionSystem;
 
-import dummyPackage.Ticket;
-import dummyPackage.User;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import transactionSystem.models.Payment;
 
 import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class PaymentControllerTest {
     @Test
