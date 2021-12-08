@@ -1,8 +1,8 @@
 package transactionSystem;
 
 import database.Controller;
-import dummyPackage.Ticket;
-import dummyPackage.User;
+
+
 import transactionSystem.models.Credit;
 import transactionSystem.models.Payment;
 
@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import bookingSystem.models.Ticket;
 
 import static database.Controller.*;
 
@@ -100,12 +102,16 @@ public class PaymentController {
         return credits;
     }
 
-    public void charge(User user, Ticket ticket) throws SQLException {
+    public void charge(int userId, int ticketId) {
+    	try {
         Set<Integer> ids = payments.keySet().stream().map(s -> Integer.parseInt(s)).collect(Collectors.toSet()); // getting int set
         Integer newID = Collections.max(ids) + 1; // get an new id for payment table
 
-        Payment newPayment = new Payment(newID, ticket.getPrice(), user.getId(), ticket.getId());
+        Payment newPayment = new Payment(newID, Ticket.getPrice(), userId, ticketId);
         addPayment(newPayment);
+    	} catch (SQLException e) {
+    		e.printStackTrace();
+    	}
     }
 
     public void addPayment(Payment newPayment) throws SQLException {
@@ -179,7 +185,7 @@ public class PaymentController {
     public Payment findPayment(Ticket ticket) {
         Connection conn = Controller.getConnection();
         String sql = "SELECT paymentID FROM payment " +
-                String.format("WHERE ticketID = %s ;", ticket.getId());
+                String.format("WHERE ticketID = %s ;", ticket.getUserId());
         System.out.println(sql);
         Statement stmt = null;
         Integer paymentID = -1;

@@ -1,9 +1,11 @@
 package bookingSystem;
 
 import bookingSystem.models.Movie;
+import bookingSystem.models.Seat;
 import bookingSystem.models.Showtime;
 import bookingSystem.models.Theater;
 import bookingSystem.models.Ticket;
+import transactionSystem.PaymentController;
 import userSystem.UserController;
 import view.GUI;
 
@@ -15,8 +17,10 @@ public class ModelsController {
 	
 	private BookingController bookingController;
 	private UserController userController;
+	private PaymentController paymentController;
 	private GUI gui;
 	private int userId = -1;
+	private int ticketId = -1;
 	private String userEmail = "";
 	private int selectedSeat = -1;
 	private double paymentAmount = 0;
@@ -28,6 +32,8 @@ public class ModelsController {
 	private void run() {
 		gui = new GUI();
 		bookingController = new BookingController();
+		userController = new UserController();
+		paymentController = new PaymentController();
 		UserButtonListener ubl = new UserButtonListener();
 		gui.getUserView().addButtonsListener(ubl);
 		
@@ -70,20 +76,36 @@ public class ModelsController {
 		gui.getBookingView().populateSeats(bookingController.getAllSeats(m, t, s));
 	}
 	
+	private void handleBookEvent() {
+		selectedSeat = gui.getBookingView().getSelectedSeatNumber();
+		System.out.println("Selected Seat: " + selectedSeat);
+		paymentAmount += Ticket.getPrice();
+		gui.getPaymentView().setPaymentAmount(paymentAmount);
+	}
+	
+	private void bookTicket() {
+		Movie m = gui.getBookingView().getSelectedMovie();
+		Theater t = gui.getBookingView().getSelectedTheater();
+		Showtime s = gui.getBookingView().getSelectedShowtime();
+		Ticket tic = bookingController.findTicket(m, t, s, new Seat(selectedSeat));
+		bookingController.bookTicket(tic, userId);
+		ticketId = tic.getTicketNumber();
+	}
+	
 	private boolean login() {
 		String username = gui.getLoginView().getUsernameText();
 		String password = gui.getLoginView().getPasswordText();
 		userId = checkCredentials(username, password);
 		if (userId >= 0) {
-			//TODO: Get user credit cards
-			//gui.getPaymentView().populateCreditCards(creditCardList);
+			gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
 			return true;
 		}
 		return false;
 	}
 	
 	private int checkCredentials(String username, String password) {
-		//credential checking not implemented, but return User Id if correct, return -1 if incorrect
+		//NOT IMPLEMENTED: credential checking 
+		// return User Id if correct, return -1 if incorrect
 		return 1;
 	}
 	
@@ -92,13 +114,15 @@ public class ModelsController {
 		String password = gui.getRegisterView().getPasswordText();
 		String name = gui.getRegisterView().getNameText();
 		String address = gui.getRegisterView().getAddressText();
-		//TODO: register user
-		//if successful registration
-		userEmail = email;
-		System.out.println("Registered User: " + name);
-		paymentAmount += 20.00;
-		gui.getPaymentView().setPaymentAmount(paymentAmount);
-		gui.setCard(5);
+		userId = userController.addRegisteredUser(email, name, address);
+		gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
+		if (userId >= 0) {
+			userEmail = email;
+			System.out.println("Registered User: " + name);
+			paymentAmount += 20.00;
+			gui.getPaymentView().setPaymentAmount(paymentAmount);
+			gui.setCard(5);
+		}
 	}
 	
 	
@@ -128,10 +152,7 @@ public class ModelsController {
 				gui.setCard(0);
 				break;
 			case "Book Seat":
-				selectedSeat = gui.getBookingView().getSelectedSeatNumber();
-				System.out.println("Selected Seat: " + selectedSeat);
-				paymentAmount += Ticket.PRICE;
-				gui.getPaymentView().setPaymentAmount(paymentAmount);
+				handleBookEvent();
 				gui.setCard(4);
 				break;
 			case "Choose Movie":
@@ -171,10 +192,11 @@ public class ModelsController {
 				try {
 					int ticketNumber = gui.getCancellationView().getTicketNumber();
 					Ticket ticket = bookingController.findTicket(ticketNumber);
-					if (ticket == null) {
+					if ((ticket == null)||(ticket.getSeat().isAvailable())) {
 						gui.getCancellationView().setResultText("Ticket not found.");
 					} else {
-						//TODO: cancel ticket
+						bookingController.cancelTicket(ticket);
+						gui.getCancellationView().setResultText("Ticket " + ticketNumber + " cancelled.");
 					}
 				} catch (NumberFormatException ex) {
 					gui.getCancellationView().setResultText("Invalid Ticket Number");
@@ -203,15 +225,16 @@ public class ModelsController {
 					userEmail = gui.getLoginView().getUsernameText();
 					gui.setCard(5);
 				} else {
-					JOptionPane.showMessageDialog(gui, "Invalid credentials");
+					JOptionPane.showMessageDialog(gui, "Invalid credentials.");
 				}
 				break;
 			case "Continue as Guest":
 				userEmail = gui.getLoginView().getUsernameText();
 				if (userEmail.equals("")) {
-					JOptionPane.showMessageDialog(gui, "Please Enter an Email");
+					JOptionPane.showMessageDialog(gui, "Please Enter an Email.");
 				} else {
-					//TODO: get user ID
+					userId = userController.addUser(userEmail);
+					gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
 					gui.setCard(5);
 				}
 				break;
@@ -250,12 +273,18 @@ public class ModelsController {
 				break;
 			case "Pay":
 				String creditCardNumber = gui.getPaymentView().getCreditCardNumber();
-				//charge credit card
-				//TODO: save payment
-				//TODO: mark ticket as booked
-				//send email with ticket and receipt
-				gui.setCard(0);
-				JOptionPane.showMessageDialog(gui, "Ticket Booked");
+				System.out.println(creditCardNumber);
+				if ((creditCardNumber == null) || (creditCardNumber.length() < 16)) {
+					JOptionPane.showMessageDialog(gui, "Please enter a valid credit card number.");
+				} else {
+					//NOT IMPLEMENTED: actually charging credit cards
+					bookTicket();
+					paymentController.charge(userId, ticketId);
+					gui.getBookingView().depopulateTheaters();
+					//NOT IMPLEMENTED: send email with ticket and receipt
+					gui.setCard(0);
+					JOptionPane.showMessageDialog(gui, "Ticket number " + ticketId + " Booked.");
+				}
 				break;
 			}
 			
