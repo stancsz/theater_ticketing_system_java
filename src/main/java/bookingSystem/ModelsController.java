@@ -13,6 +13,12 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Central controller class for movie booking system.
+ * Contains main method. Run this to run app.
+ * @author David Cooksley
+ *
+ */
 public class ModelsController {
 	
 	private BookingController bookingController;
@@ -24,11 +30,20 @@ public class ModelsController {
 	private String userEmail = "";
 	private int selectedSeat = -1;
 	private double paymentAmount = 0;
+	
+	
+	/**
+	 * Main method.
+	 */
 	public static void main(String[] args) {
 		ModelsController app = new ModelsController();
 		app.run();
 	}
 	
+	/**
+	 * Initializes booking, user, and payment controllers, and GUI.
+	 * Initializes and Registers ActionListeners.
+	 */
 	private void run() {
 		gui = new GUI();
 		bookingController = new BookingController();
@@ -55,77 +70,9 @@ public class ModelsController {
 		
 	}
 	
-	
-	
-	
-	private void handleMovieEvent() {
-		Movie m = gui.getBookingView().getSelectedMovie();
-		gui.getBookingView().populateTheaters(bookingController.getAllTheaters(m));
-	}
-	
-	private void handleTheaterEvent() {
-		Movie m = gui.getBookingView().getSelectedMovie();
-		Theater t = gui.getBookingView().getSelectedTheater();
-		gui.getBookingView().populateShowtimes(bookingController.getAllShowtimes(m, t));
-	}
-	
-	private void handleShowtimeEvent() {
-		Movie m = gui.getBookingView().getSelectedMovie();
-		Theater t = gui.getBookingView().getSelectedTheater();
-		Showtime s = gui.getBookingView().getSelectedShowtime();
-		gui.getBookingView().populateSeats(bookingController.getAllSeats(m, t, s));
-	}
-	
-	private void handleBookEvent() {
-		selectedSeat = gui.getBookingView().getSelectedSeatNumber();
-		System.out.println("Selected Seat: " + selectedSeat);
-		paymentAmount += Ticket.getPrice();
-		gui.getPaymentView().setPaymentAmount(paymentAmount);
-	}
-	
-	private void bookTicket() {
-		Movie m = gui.getBookingView().getSelectedMovie();
-		Theater t = gui.getBookingView().getSelectedTheater();
-		Showtime s = gui.getBookingView().getSelectedShowtime();
-		Ticket tic = bookingController.findTicket(m, t, s, new Seat(selectedSeat));
-		bookingController.bookTicket(tic, userId);
-		ticketId = tic.getTicketNumber();
-	}
-	
-	private boolean login() {
-		String username = gui.getLoginView().getUsernameText();
-		String password = gui.getLoginView().getPasswordText();
-		userId = checkCredentials(username, password);
-		if (userId >= 0) {
-			gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
-			return true;
-		}
-		return false;
-	}
-	
-	private int checkCredentials(String username, String password) {
-		//NOT IMPLEMENTED: credential checking 
-		// return User Id if correct, return -1 if incorrect
-		return 1;
-	}
-	
-	private void handleRegisterEvent() {
-		String email = gui.getRegisterView().getEmailText();
-		String password = gui.getRegisterView().getPasswordText();
-		String name = gui.getRegisterView().getNameText();
-		String address = gui.getRegisterView().getAddressText();
-		userId = userController.addRegisteredUser(email, name, address);
-		gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
-		if (userId >= 0) {
-			userEmail = email;
-			System.out.println("Registered User: " + name);
-			paymentAmount += 20.00;
-			gui.getPaymentView().setPaymentAmount(paymentAmount);
-			gui.setCard(5);
-		}
-	}
-	
-	
+	/**
+	 * Private ActionListener class for buttons in UserView page.
+	 */
 	private class UserButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -140,8 +87,37 @@ public class ModelsController {
 			}
 		}
 	}
-
 	
+	
+	
+	/**
+	 * Set of helper methods for handling events from BookingView page.
+	 */
+	private void handleMovieEvent() {
+		Movie m = gui.getBookingView().getSelectedMovie();
+		gui.getBookingView().populateTheaters(bookingController.getAllTheaters(m));
+	}
+	private void handleTheaterEvent() {
+		Movie m = gui.getBookingView().getSelectedMovie();
+		Theater t = gui.getBookingView().getSelectedTheater();
+		gui.getBookingView().populateShowtimes(bookingController.getAllShowtimes(m, t));
+	}
+	private void handleShowtimeEvent() {
+		Movie m = gui.getBookingView().getSelectedMovie();
+		Theater t = gui.getBookingView().getSelectedTheater();
+		Showtime s = gui.getBookingView().getSelectedShowtime();
+		gui.getBookingView().populateSeats(bookingController.getAllSeats(m, t, s));
+	}
+	private void handleBookEvent() {
+		selectedSeat = gui.getBookingView().getSelectedSeatNumber();
+		System.out.println("Selected Seat: " + selectedSeat);
+		paymentAmount += Ticket.getPrice();
+		gui.getPaymentView().setPaymentAmount(paymentAmount);
+	}
+
+	/**
+	 * Private ActionListener class for buttons in BookingView page.
+	 */
 	private class BookingButtonListener implements ActionListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -163,13 +139,11 @@ public class ModelsController {
 				break;
 			case "Choose Theater":
 				handleTheaterEvent();
-				//For some reason, the seat buttons don't update their visibility unless the card is swapped in and out
 				gui.setCard(0);
 				gui.setCard(1);
 				break;
 			case "Choose Showtime":
 				handleShowtimeEvent();
-				//For some reason, the seat buttons don't update their visibility unless the card is swapped in and out
 				gui.setCard(0);
 				gui.setCard(1);
 				break;
@@ -178,6 +152,9 @@ public class ModelsController {
 		}
 	}
 	
+	/**
+	 * Private ActionListener class for buttons on CancellationView page.
+	 */
 	private class CancellationButtonListener implements ActionListener {
 
 		@Override
@@ -207,6 +184,28 @@ public class ModelsController {
 		
 	}
 	
+	/**
+	 * Set of helper methods for handling events on LoginView page.
+	 */
+	private boolean login() {
+		String username = gui.getLoginView().getUsernameText();
+		String password = gui.getLoginView().getPasswordText();
+		userId = checkCredentials(username, password);
+		if (userId >= 0) {
+			gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
+			return true;
+		}
+		return false;
+	}
+	private int checkCredentials(String username, String password) {
+		//NOT IMPLEMENTED: credential checking 
+		// return User Id if correct, return -1 if incorrect
+		return 1;
+	}
+	
+	/**
+	 * Private ActionListener class for buttons on LoginView page.
+	 */
 	private class LoginButtonListener implements ActionListener {
 
 		@Override
@@ -243,6 +242,28 @@ public class ModelsController {
 		
 	}
 	
+	/**
+	 * Helper method for events on RegisterView page.
+	 */
+	private void handleRegisterEvent() {
+		String email = gui.getRegisterView().getEmailText();
+		String password = gui.getRegisterView().getPasswordText();
+		String name = gui.getRegisterView().getNameText();
+		String address = gui.getRegisterView().getAddressText();
+		userId = userController.addRegisteredUser(email, name, address);
+		gui.getPaymentView().populateCreditCards(userController.getCreditCards(userId));
+		if (userId >= 0) {
+			userEmail = email;
+			System.out.println("Registered User: " + name);
+			paymentAmount += 20.00;
+			gui.getPaymentView().setPaymentAmount(paymentAmount);
+			gui.setCard(5);
+		}
+	}
+	
+	/**
+	 * private ActionListener class for buttons on RegisterView page.
+	 */
 	private class RegisterButtonListener implements ActionListener {
 
 		@Override
@@ -261,6 +282,21 @@ public class ModelsController {
 		
 	}
 	
+	/**
+	 * Helper method for events on PaymentView page.
+	 */
+	private void bookTicket() {
+		Movie m = gui.getBookingView().getSelectedMovie();
+		Theater t = gui.getBookingView().getSelectedTheater();
+		Showtime s = gui.getBookingView().getSelectedShowtime();
+		Ticket tic = bookingController.findTicket(m, t, s, new Seat(selectedSeat));
+		bookingController.bookTicket(tic, userId);
+		ticketId = tic.getTicketNumber();
+	}
+	
+	/**
+	 * Private ActionListener class for buttons on PaymentView page.
+	 */
 	private class PaymentButtonListener implements ActionListener {
 
 		@Override

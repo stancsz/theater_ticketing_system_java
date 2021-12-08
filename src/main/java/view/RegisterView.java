@@ -10,6 +10,11 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Class representing page to register as a new registered user in movie booking system.
+ * @author David Cooksley
+ *
+ */
 @SuppressWarnings("serial")
 public class RegisterView extends JPanel {
 	
@@ -20,6 +25,9 @@ public class RegisterView extends JPanel {
 	private JButton registerButton;
 	private JButton backButton;
 	
+	/**
+	 * Constructor. Initializes components, builds and organizes UI layout. 
+	 */
 	public RegisterView() {
 		setLayout(new BorderLayout());
 		
@@ -74,23 +82,39 @@ public class RegisterView extends JPanel {
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
 	
+	/**
+	 * Adds ActionListener to all buttons on this page.
+	 * @param l: ActionListener to handle button events.
+	 */
 	public void addButtonsListener(ActionListener l) {
 		registerButton.addActionListener(l);
 		backButton.addActionListener(l);
 	}
 	
+	/**
+	 * @return: text in email field
+	 */
 	public String getEmailText() {
 		return emailField.getText();
 	}
 	
+	/**
+	 * @return text in name field
+	 */
 	public String getNameText() {
 		return nameField.getText();
 	}
 	
+	/**
+	 * @return text in address field
+	 */
 	public String getAddressText() {
 		return addressField.getText();
 	}
 	
+	/**
+	 * @return text in password field
+	 */
 	@SuppressWarnings("deprecation")
 	public String getPasswordText() {
 		return passwordField.getText();

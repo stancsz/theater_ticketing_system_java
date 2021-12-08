@@ -10,6 +10,11 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * Class representing page to log into (or choose to register or continue as a guest) movie booking system.
+ * @author David Cooksley
+ *
+ */
 @SuppressWarnings("serial")
 public class LoginView extends JPanel {
 	
@@ -20,6 +25,9 @@ public class LoginView extends JPanel {
 	JButton registerButton;
 	JButton backButton;
 	
+	/**
+	 * Constructor. Initializes components, builds and organizes UI layout. 
+	 */
 	public LoginView() {
 		setLayout(new BorderLayout());
 		setAlignmentX(CENTER_ALIGNMENT);
@@ -57,15 +65,25 @@ public class LoginView extends JPanel {
 		add(bottomPanel, BorderLayout.SOUTH);
 	}
 	
+	/**
+	 * @return text in username field
+	 */
 	public String getUsernameText() {
 		return usernameField.getText();
 	}
 	
+	/**
+	 * @return text in password field
+	 */
 	@SuppressWarnings("deprecation")
 	public String getPasswordText() {
 		return passwordField.getText();
 	}
 	
+	/**
+	 * Adds ActionListener to all buttons on this page.
+	 * @param l: ActionListener to handle button events.
+	 */
 	public void addButtonsListener(ActionListener l) {
 		loginButton.addActionListener(l);
 		guestButton.addActionListener(l);

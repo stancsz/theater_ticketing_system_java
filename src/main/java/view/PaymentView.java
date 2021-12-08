@@ -12,6 +12,11 @@ import javax.swing.border.EmptyBorder;
 
 import userSystem.models.CreditCard;
 
+/**
+ * Class representing page to make payment in movie booking system.
+ * @author David Cooksley
+ *
+ */
 @SuppressWarnings("serial")
 public class PaymentView extends JPanel {
 	
@@ -22,6 +27,9 @@ public class PaymentView extends JPanel {
 	private JButton backButton;
 	
 	
+	/**
+	 * Constructor. Initializes components, builds and organizes UI layout. 
+	 */
 	public PaymentView() {
 		setLayout(new BorderLayout());
 		JPanel topPanel = new JPanel();
@@ -56,28 +64,41 @@ public class PaymentView extends JPanel {
 		midPanel.setBorder(new EmptyBorder(new Insets(150,200,300,200)));
 		add(midPanel, BorderLayout.CENTER);
 		
-		
-		
 		backButton = new JButton("Back");
 		add(backButton, BorderLayout.SOUTH);
 		
 	}
 
+	/**
+	 * Sets payment amount.
+	 * @param paymentAmount
+	 */
 	public void setPaymentAmount(double paymentAmount) {
 		this.paymentAmount = paymentAmount;
-		amountLabel.setText("" + paymentAmount);
+		amountLabel.setText("" + this.paymentAmount);
 	}
 	
+	/**
+	 * Populates combobox of credit card numbers
+	 * @param cards: List of credit cards
+	 */
 	public void populateCreditCards(ArrayList<CreditCard> cards) {
 		for (CreditCard card : cards) {
 			creditCardBox.addItem(card.getCreditCardNumber());
 		}
 	}
 	
+	/**
+	 * @return selected credit card number from combo box.
+	 */
 	public String getCreditCardNumber() {
 		return (String)creditCardBox.getSelectedItem();
 	}
 	
+	/**
+	 * Adds ActionListener to all buttons on this page.
+	 * @param l: ActionListener to handle button events.
+	 */
 	public void addButtonsListener(ActionListener l)  {
 		backButton.addActionListener(l);
 		payButton.addActionListener(l);
