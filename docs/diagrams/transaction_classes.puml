@@ -1,0 +1,25 @@
+@startuml
+class InvoiceController {
+   doTransaction(ps: PaymentController, : UnknownType) : 
+   Operation1() : 
+}
+class PaymentController {
+   payments : ArrayList<Payments>
+   charge(user: UnknownType, : Payment, ticket: UnknownType) : 
+   refund(p: Payment, : UnknownType) : 
+   addPayment(p: Payment, : UnknownType) : 
+   removePayment(p: Payment, : UnknownType) : 
+   findPayment(t: UnknownType, : Payment) : 
+}
+class CreditCard {
+  private number : int
+   holder : String
+   Operation1() : 
+}
+class Payment {
+  private paymentID : int
+  private amount : double
+  private userID : int
+  private ticketID : int
+}
+@enduml

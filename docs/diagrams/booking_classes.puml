@@ -1,0 +1,49 @@
+@startuml
+class Ticket {
+  private ticketNumber : int
+  private seat : Seat
+  private userId : int
+  private movie : Movie
+  private theater : Theater
+  private showtime : Showtime
+   Operation1() : 
+   Operation2() : 
+   toString(: UnknownType) : 
+}
+class Class1 {
+   Attribute1 : 
+}
+class Movie {
+  private name : String
+  private theaters : ArrayList<Theater>
+}
+class Theater {
+  private location : String
+  private showtime : ArrayList<Showtime>
+}
+class Room {
+  private roomNumber : int
+  private seats : ArrayList<Seat>
+}
+class Seat {
+  private seatNumber : int
+  private isAvailable : boolean
+   changeAvailability(: UnknownType) : 
+}
+class Showtime {
+  private startTime : String
+  private seats : ArrayList<Seats>
+  private roomNumber : int
+}
+class BookingController {
+  private tickets : ArrayList<Tickets>
+  private movies : ArrayList<Movies>
+   getAllMovies(: UnknownType) : 
+   getAllTheaters(: UnknownType) : 
+   getAllShowtimes(: UnknownType) : 
+   getAllSeats(: UnknownType) : 
+   findTicket(: Ticket, m: Movie, t: Theater, s: Showtime, st: Seat) : 
+   bookTicket(t: Ticket, u: UnknownType, : UnknownType) : 
+   findTicket(ticketNumber: UnknownType, : Ticket) : 
+}
+@enduml

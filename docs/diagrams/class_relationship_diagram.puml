@@ -1,0 +1,179 @@
+@startuml
+class BookingView {
+}
+class CancellationView {
+}
+class UserView {
+}
+class GUI {
+}
+class UserLogin {
+}
+class RegisterView {
+}
+class ModelsController {
+}
+class RegisteredUser {
+}
+class database {
+}
+class UserController {
+}
+class Credit {
+}
+class User {
+}
+class CreditCard {
+}
+class SeatsGUI {
+}
+class MovieCatalogue {
+}
+class TheaterCatalogue {
+}
+class Seat {
+}
+class Payment {
+}
+class InvoiceController {
+}
+class PaymentController {
+}
+class Ticket {
+}
+class Showtime {
+}
+class Theater {
+}
+class ShowTime {
+}
+class Movie {
+}
+class BookingController {
+}
+BookingView "1" --  GUI
+BookingView  --  UserView
+CancellationView  --  GUI
+CancellationView  --  UserView
+CancellationView "1" --  GUI
+UserView "1" --  BookingView : has
+UserView  --  RegisterView
+UserView "1, 0" --  CancellationView
+UserView "1" --  GUI
+GUI  --  ModelsController
+GUI  --  ModelsController : has
+GUI  --  ModelsController : has
+GUI  --  ModelsController
+UserLogin  --  GUI
+RegisterView  --  GUI
+RegisteredUser  --  Theater
+RegisteredUser  --  Theater
+RegisteredUser  --  UserController
+RegisteredUser  --  database
+RegisteredUser  --  UserController
+RegisteredUser "1..*" --  UserController
+RegisteredUser "*" --  database
+RegisteredUser  --  User
+RegisteredUser  --  User
+UserController  --  BookingController
+UserController "1" --  BookingController
+UserController  --  ModelsController
+UserController "1" --  ModelsController
+UserController  --  Credit
+UserController  --  ModelsController : has
+UserController  --  ModelsController
+Credit "0..*" --  User
+User  --  MovieCatalogue : Search
+User  --  MovieCatalogue
+User  --  TheaterCatalogue
+User  --  TheaterCatalogue : ffff
+User  --  TheaterCatalogue
+User  --  ShowTime
+User  --  SeatsGUI
+User  --  Theater
+User  --  Theater
+User  --  RegisteredUser
+User  --  SeatsGUI
+User  --  RegisteredUser
+User "1..*" --  UserController
+CreditCard "0..*" --  RegisteredUser
+SeatsGUI  --  Seat
+SeatsGUI  --  Showtime
+SeatsGUI  --  ShowTime
+SeatsGUI "1" --  Showtime
+SeatsGUI "1" --  ShowTime
+MovieCatalogue  --  Movie
+MovieCatalogue  --  MovieCatalogue
+MovieCatalogue  --  BookingController
+MovieCatalogue  --  database
+MovieCatalogue  --  Theater
+MovieCatalogue  --  Theater
+MovieCatalogue "1" --  database
+MovieCatalogue "1" --  BookingController
+TheaterCatalogue  --  TheaterCatalogue
+TheaterCatalogue  --  Theater
+TheaterCatalogue  --  BookingController
+TheaterCatalogue  --  database
+TheaterCatalogue "1" --  database
+TheaterCatalogue "1" --  BookingController
+Seat  --  SeatsGUI
+Seat  --  Ticket
+Seat  --  Seat
+Seat  --  Seat
+Seat  --  Ticket
+Seat "1" --  Ticket
+Seat "1..*" --  SeatsGUI
+Seat "1..*" --  Showtime
+Seat "1" --  Ticket
+Payment  --  User
+Payment "1" --  User
+Payment  --  User
+Payment  --  User
+Payment "1..*" --  PaymentController
+Payment "1..*" --  PaymentController
+Payment "0..*" --  PaymentController
+InvoiceController  --  ModelsController
+InvoiceController "1" --  ModelsController
+PaymentController  --  ModelsController
+PaymentController "1..*" --  InvoiceController
+Ticket  --  BookingController
+Ticket  --  Seat
+Ticket "0..*" --  BookingController
+Ticket "0..*" --  BookingController
+Showtime  --  SeatsGUI
+Showtime  --  ShowTime
+Showtime  --  Theater
+Showtime  --  ShowTime
+Showtime "1..*" --  Theater
+Showtime "1" --  ShowTime
+Showtime "0..*" --  Theater
+Theater  --  Movie
+Theater  --  Showtime
+Theater  --  ShowTime
+Theater  --  ShowTime
+Theater  --  Movie
+Theater  --  TheaterCatalogue
+Theater "1..*" --  TheaterCatalogue
+Theater  --  ShowTime
+Theater "0..*" --  Movie
+ShowTime  --  Movie
+ShowTime  --  Showtime
+ShowTime  --  Movie
+ShowTime  --  SeatsGUI
+ShowTime  --  Theater
+ShowTime  --  Ticket
+ShowTime  --  Theater
+ShowTime "1" --  Ticket
+ShowTime "1..*" --  Theater
+ShowTime "0..*" --  Ticket
+Movie  --  Movie
+MovieCatalogue  --  Theater
+Movie  --  ShowTime
+Movie  --  MovieCatalogue
+Movie "1" --  ShowTime
+Movie "1..*" --  MovieCatalogue
+Movie "0..*" --  BookingController
+BookingController  --  ModelsController
+BookingController  --  ModelsController : has
+BookingController  --  ModelsController
+@enduml

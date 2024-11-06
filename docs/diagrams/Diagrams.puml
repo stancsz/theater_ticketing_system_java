@@ -1,0 +1,46 @@
+@startuml
+User  --  Search for Movie
+User  --  Select Theater & Seat
+User  --  Select Seat
+User  --  Purchase Tickets
+User  --  Get Ticket & Receipt
+User  --  Cancel Ticket
+User  --  Receive Public Anouncement
+User  --  Receive Early Movie News
+User  --  Subscribe
+Registered User  --  Search for Movie
+Registered User  --  Select Theater & Seat
+Registered User  --  Select Seat
+Registered User  --  Purchase Tickets
+Registered User  --  Get Ticket & Receipt
+Registered User  --  Cancel Ticket
+Registered User  --  Registered User
+Search for Movie  --  DB
+Select Theater & Seat  --  DB
+Select Seat  --  DB
+Get Ticket & Receipt  --  Billing System
+Purchase Tickets  --  Billing System
+Cancel Ticket  --  Billing System
+DB  --  Receive Early Movie News
+DB  --  Receive Public Anouncement
+DB  --  Purchase Tickets
+DB  --  Cancel Ticket
+DB  --  Log In
+RU  --  Receive Early Movie News
+RU  --  Cancel Ticket
+RU  --  Get Ticket & Receipt
+RU  --  Purchase Tickets
+RU  --  Select Seat
+RU  --  Select Theater & Seat
+RU  --  Search for Movie
+RU  --  Cancel Subscription
+RU  --  Log In
+Subscribe  --  DB
+Subscribe  --  Billing System
+Subscribe  --  RU
+Cancel Subscription  --  DB
+Cancel Subscription  --  Billing System
+View Showtime  --  User
+View Showtime  --  RU
+View Showtime  --  DB
+@enduml
