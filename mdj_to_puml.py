@@ -12,21 +12,20 @@ def build_reference_map(elements):
     for element in elements:
         if '_id' in element and 'name' in element:
             ref_map[element['_id']] = element['name']
-        # Recursively build the map for nested ownedElements
         if 'ownedElements' in element:
             ref_map.update(build_reference_map(element['ownedElements']))
     return ref_map
 
-def find_elements(element, element_type):
+def find_all_elements(element):
+    """Recursively find all elements."""
     elements = []
     if isinstance(element, dict):
-        if element.get('_type') == element_type:
-            elements.append(element)
+        elements.append(element)
         for sub_element in element.get('ownedElements', []):
-            elements.extend(find_elements(sub_element, element_type))
+            elements.extend(find_all_elements(sub_element))
     elif isinstance(element, list):
         for item in element:
-            elements.extend(find_elements(item, element_type))
+            elements.extend(find_all_elements(item))
     return elements
 
 def resolve_reference(ref, ref_map):
@@ -35,61 +34,93 @@ def resolve_reference(ref, ref_map):
         ref = ref['$ref']
     return ref_map.get(ref, "UnknownType") if isinstance(ref, str) else "UnknownType"
 
+def convert_visibility(visibility):
+    """Convert visibility keywords to PlantUML symbols."""
+    visibility_map = {
+        'public': '+',
+        'private': '-',
+        'protected': '#',
+        'package': '~'
+    }
+    return visibility_map.get(visibility, '')  # Default to empty if visibility is unknown
+
 def convert_to_puml(data):
     puml_lines = ['@startuml']
-
+    
     # Build a reference map for all elements to resolve references
     ref_map = build_reference_map(data.get('ownedElements', []))
+    
+    # Find all elements to handle them generically
+    all_elements = find_all_elements(data.get('ownedElements', []))
+    for element in all_elements:
+        element_type = element.get('_type', 'UnknownType')
+        
+        # Map StarUML types to PlantUML
+        if element_type == 'UMLClass':
+            element_keyword = 'class'
+        elif element_type == 'UMLInterface':
+            element_keyword = 'interface'
+        elif element_type == 'UMLAbstractClass':
+            element_keyword = 'abstract class'
+        elif element_type == 'UMLPackage':
+            element_keyword = 'package'
+        else:
+            continue  # Skip unsupported element types
 
-    # Convert classes
-    classes = find_elements(data.get('ownedElements', []), 'UMLClass')
-    for cls in classes:
-        # Add documentation if available
-        if 'documentation' in cls and cls['documentation'].strip():
-            puml_lines.append(f"' {cls['documentation'].replace('\n', '\n\' ')}")
+        # Check for valid element name
+        element_name = element.get('name')
+        if not element_name:
+            continue  # Skip unnamed elements
+
+        puml_lines.append(f"{element_keyword} {element_name} {{")
         
-        # Add AI tag if available
-        ai_tag = next((tag for tag in cls.get('tags', []) if tag['name'] == 'AI'), None)
-        if ai_tag and 'value' in ai_tag:
-            puml_lines.append(f"' AI_CMD: {ai_tag['value']}")
-        
-        # Class definition
-        puml_lines.append(f'class {cls["name"]} {{')
-        
-        # Add attributes
-        for attr in cls.get('attributes', []):
-            visibility = attr.get('visibility', '')
+        # Add attributes generically
+        for attr in element.get('attributes', []):
+            attr_visibility = convert_visibility(attr.get('visibility', ''))
             attr_type = resolve_reference(attr.get("type", ""), ref_map) if isinstance(attr.get("type", ""), dict) else attr.get("type", "")
-            puml_lines.append(f'  {visibility} {attr["name"]} : {attr_type}')
+            puml_lines.append(f"  {attr_visibility} {attr['name']} : {attr_type}")
         
-        # Add operations with resolved parameter types
-        for op in cls.get('operations', []):
-            visibility = op.get('visibility', '')
+        # Add operations generically
+        for op in element.get('operations', []):
+            op_visibility = convert_visibility(op.get('visibility', ''))
             parameters = ', '.join(
                 f'{param.get("name", "")}: {resolve_reference(param.get("type", ""), ref_map)}'
                 for param in op.get('parameters', [])
             )
             return_type = resolve_reference(op.get("returnType", ""), ref_map) if isinstance(op.get("returnType", ""), dict) else op.get("returnType", "")
-            puml_lines.append(f'  {visibility} {op.get("name", "")}({parameters}) : {return_type}')
+            puml_lines.append(f"  {op_visibility} {op.get('name', '')}({parameters}) : {return_type}")
         
-        puml_lines.append('}')
+        puml_lines.append("}")
 
     # Convert associations with resolved references
-    associations = find_elements(data.get('ownedElements', []), 'UMLAssociation')
-    for assoc in associations:
-        end1 = assoc.get('end1', {})
-        end2 = assoc.get('end2', {})
+    for element in all_elements:
+        element_type = element.get('_type')
+        if element_type not in ['UMLAssociation', 'UMLGeneralization', 'UMLDependency']:
+            continue
 
-        # Resolve references for class names
+        end1 = element.get('end1', {})
+        end2 = element.get('end2', {})
+
         class1_name = resolve_reference(end1.get('reference', ''), ref_map)
         class2_name = resolve_reference(end2.get('reference', ''), ref_map)
+        if class1_name == "UnknownType" or class2_name == "UnknownType":
+            continue  # Skip invalid relationships
+
+        # Handle multiplicities if available
         multiplicity1 = f'"{end1.get("multiplicity", "")}"' if end1.get("multiplicity") else ''
         multiplicity2 = f'"{end2.get("multiplicity", "")}"' if end2.get("multiplicity") else ''
 
-        # Format association line with optional name and cleaner spacing
-        association_line = f"{class1_name} {multiplicity1} -- {multiplicity2} {class2_name}"
-        if assoc.get("name"):
-            association_line += f' : {assoc["name"]}'
+        # Choose relationship symbol
+        if element_type == 'UMLAssociation':
+            relationship = "--"
+        elif element_type == 'UMLGeneralization':
+            relationship = "<|--"
+        elif element_type == 'UMLDependency':
+            relationship = "<.."
+
+        association_line = f"{class1_name} {multiplicity1} {relationship} {multiplicity2} {class2_name}"
+        if element.get("name"):
+            association_line += f' : {element["name"]}'
         
         puml_lines.append(association_line)
     

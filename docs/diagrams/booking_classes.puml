@@ -1,11 +1,11 @@
 @startuml
 class Ticket {
-  private ticketNumber : int
-  private seat : Seat
-  private userId : int
-  private movie : Movie
-  private theater : Theater
-  private showtime : Showtime
+  - ticketNumber : int
+  - seat : Seat
+  - userId : int
+  - movie : Movie
+  - theater : Theater
+  - showtime : Showtime
    Operation1() : 
    Operation2() : 
    toString(: UnknownType) : 
@@ -14,30 +14,30 @@ class Class1 {
    Attribute1 : 
 }
 class Movie {
-  private name : String
-  private theaters : ArrayList<Theater>
+  - name : String
+  - theaters : ArrayList<Theater>
 }
 class Theater {
-  private location : String
-  private showtime : ArrayList<Showtime>
+  - location : String
+  - showtime : ArrayList<Showtime>
 }
 class Room {
-  private roomNumber : int
-  private seats : ArrayList<Seat>
+  - roomNumber : int
+  - seats : ArrayList<Seat>
 }
 class Seat {
-  private seatNumber : int
-  private isAvailable : boolean
+  - seatNumber : int
+  - isAvailable : boolean
    changeAvailability(: UnknownType) : 
 }
 class Showtime {
-  private startTime : String
-  private seats : ArrayList<Seats>
-  private roomNumber : int
+  - startTime : String
+  - seats : ArrayList<Seats>
+  - roomNumber : int
 }
 class BookingController {
-  private tickets : ArrayList<Tickets>
-  private movies : ArrayList<Movies>
+  - tickets : ArrayList<Tickets>
+  - movies : ArrayList<Movies>
    getAllMovies(: UnknownType) : 
    getAllTheaters(: UnknownType) : 
    getAllShowtimes(: UnknownType) : 

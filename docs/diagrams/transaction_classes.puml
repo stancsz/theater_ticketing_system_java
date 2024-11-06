@@ -12,14 +12,14 @@ class PaymentController {
    findPayment(t: UnknownType, : Payment) : 
 }
 class CreditCard {
-  private number : int
+  - number : int
    holder : String
    Operation1() : 
 }
 class Payment {
-  private paymentID : int
-  private amount : double
-  private userID : int
-  private ticketID : int
+  - paymentID : int
+  - amount : double
+  - userID : int
+  - ticketID : int
 }
 @enduml

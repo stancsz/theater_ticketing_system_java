@@ -1,4 +1,6 @@
 @startuml
+package View {
+}
 class BookingView {
 }
 class CancellationView {
@@ -11,11 +13,19 @@ class UserLogin {
 }
 class RegisterView {
 }
+package Controller {
+}
 class ModelsController {
 }
 class RegisteredUser {
 }
+package DatabaseModel {
+}
 class database {
+}
+package Models {
+}
+package UserModel {
 }
 class UserController {
 }
@@ -25,6 +35,8 @@ class User {
 }
 class CreditCard {
 }
+package bookingSystem {
+}
 class SeatsGUI {
 }
 class MovieCatalogue {
@@ -32,6 +44,8 @@ class MovieCatalogue {
 class TheaterCatalogue {
 }
 class Seat {
+}
+package TransactionSystemModel {
 }
 class Payment {
 }

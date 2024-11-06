@@ -1,2 +1,20 @@
 @startuml
+package View {
+}
+package Controller {
+}
+package Models {
+}
+package TransactionSystemModel {
+}
+package bookingSystem {
+}
+package database {
+}
+package UserModel {
+}
+package BookingEntity {
+}
+package BookingControl {
+}
 @enduml
